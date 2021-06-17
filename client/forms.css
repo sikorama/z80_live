@@ -1,0 +1,245 @@
+/** CSS Pour les formulaires et fenetres modales */
+
+
+/* Fenetres Modales */
+.export-modal{
+	position: fixed;
+	z-index: 9998;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, .5);
+	display: table;
+}
+.modal-wrapper{
+	display: table-cell;
+	vertical-align: middle;
+}
+.modal-container{
+	margin: 0px auto;
+	padding: 13px;
+	background-color: #fff;
+	border-radius: 10px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+	transition: all .3s ease;
+	max-width: 540px;
+	text-align: center;
+}
+.modal-container .close{
+	float: right;
+	color: #99a5b7;
+}
+.close i{
+	margin: 0;
+}
+.export-icon{
+	width: 80px;
+	height: 80px;
+	line-height: 80px;
+	margin: 18px auto;
+	border: 3px solid #dfe3ea;
+	border-radius: 100%;
+}
+.export-icon i{
+	font-size: 33px;
+	margin: 0;
+	color: #27cd6b;
+}
+
+.modal-container h1{
+	font-size: 23px;
+	color: #324782;
+
+/*	color: #27cd6b;*/
+	margin: 0 0 6px;
+}
+.btn-export-wrapper{
+	margin: 33px 0;
+}
+.btn-export-wrapper .export-btn{
+	float: none;
+	margin: 0;
+}
+.btn-export-wrapper .export-btn + .export-btn{
+	margin-left: 15px;
+}
+/* END EXPORT MODAL */
+
+
+
+.cmddate{
+/*	clear:left;*/
+	float:left;
+	text-align: left;
+}
+
+.switchCmd{
+/*	clear:left;*/
+	float:left;
+	text-align: left;
+	color: grey;
+}
+
+
+/* Reglage de parametres dans une Modale */
+.modalForm{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.modalForm label{
+	margin-right: 10px;
+	clear: left;
+	float: left;
+	min-width:200px;
+	text-align: right;
+}
+
+
+/*Formulaires / Fiches */
+.fiche-forme {
+	margin-left: 10px;
+}
+
+.addForm1 label{
+}
+	
+.addForm1 input{
+	margin-bottom: 10px;
+	display: inline-block;
+}
+
+/*
+.addForm1 fieldset {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: inline-block;
+	float: left;
+	clear: left;
+	width: 80%;
+	vertical-align: top;
+
+}
+
+
+
+.addForm1  input[type=radio],	.addForm1 input[type=checkbox]{
+	margin-bottom: 10px;
+	display: inline-block;
+	float: left;
+	min-width: 0px;
+}
+
+
+
+.addForm1 a{
+	font-size: 18px;
+	margin-bottom: 10px;
+	display: inline-block;
+	cursor: pointer;
+	color: black;
+    text-decoration: none;
+	vertical-align: top;
+}
+
+
+
+
+.addForm1 select{
+	margin-bottom: 10px;
+	display: inline-block;
+	float: left;
+	min-width:260px;
+
+}
+
+
+.addForm1 textarea{
+	margin-bottom: 10px;
+	display: inline-block;
+	float: left;
+	width: 50%;
+}
+.addForm1 button{
+	display: inline-block;
+  float: left;
+  text-align: right;
+	font-size: 16px;
+	margin-right: 10px;
+}
+.addForm1 span{
+	color: #FF0000;
+	display: inline-block;
+	float: left;
+	clear: left;
+}
+*/
+
+
+.addForm1 ol{
+	margin-left: 20px;
+}
+
+.addForm1 .af-radio-group {
+	margin-left: 200px;
+}
+
+.addForm1 .af-radio-group label{
+clear: none;
+min-width:0px;
+margin-right: 10px;
+}
+
+.addForm1 .af-checkbox-group{
+	margin-left: 200px;
+}
+
+.addForm1 .af-checkbox-group label{
+	clear: none;
+	min-width:0px;
+	margin-right: 10px;
+}
+
+
+.addForm1 .autoform-add-item{
+	clear: left;
+	float: left;
+	background: lightgreen;
+}
+
+
+.addForm1  .af-file-upload-capture{
+	float: left;
+	clear: left;
+	background: white ;
+}
+
+/* Bouton pour retirer le fichier dans un champ fichier(image)*/
+.addForm1 button[data-remove-file]{
+	float: left;
+	clear: left;
+	background: white ;
+}
+
+/* bouton pour retirer un item dans une liste d'éléments*/
+.addForm1 .autoform-remove-item{
+	clear:left;
+	margin-bottom: 30px;
+	background: white ;
+}
+
+/* Selection des couleurs cmc parmi des preset */
+.button-color-selected {
+	font-weight: bold;
+	border-color: #0000ff;
+	border-width: 3px;
+}
+
+.af-fieldGroup-heading {
+	color: #FF0000
+}
+
+.disabled {
+	color: #808080;
+	pointer-events: none;
+}

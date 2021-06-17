@@ -1,0 +1,145 @@
+<!-- Table des Sources -->
+<template name="SourceTable">
+  <div class="">
+    <div class="scrollable-search">
+      <div class="altern-lines">
+        <table class="pure-table pure-table-horizontal">
+          <thead>
+            <tr>
+              <th id="name">
+                Name
+              </th>
+              <th id="rank">
+                Rating
+              </th>
+              <th id="author">
+                Author
+              </th>
+              <th id="owner">
+                Owner
+              </th>
+              {{#if userHasMultipleGroups}}
+              <th id="group">
+                Group
+              </th>
+              {{/if}}
+
+              <th id="cat">
+                Category
+              </th>
+              <th id="buildOptions.buildmode">
+                Type
+              </th>
+              <th id="timestamp">
+                Version
+              </th>
+              <th id="desc">
+                Description
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each src in search_sources}}
+            {{> SourceTableItem src=src}}
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="scrollable-search-status">
+      {{#if Template.subscriptionsReady}}
+      {{displayCount search_sources.count}}
+      {{/if}}
+    </div>
+  </div>
+</template>
+
+
+<template name="SourceTableItem">
+  <tr id={{src._id}}>
+    <td id={{src._id}}>
+      <a style="display: block;" class="infl-tab-name" href="/edit/{{src._id}}">
+        {{src.name}}
+      </a>
+    </td>
+    
+    <td> {{>Stars numvotes=src.numvotes score=src.score}} </td>
+    <td id={{src._id}}><a href="/browse?search={{src.author}}" >{{src.author}}</a> </td>
+    <td id={{src._id}}><a href="/browse?search={{src.owner}}" >{{username src.owner}}</a> </td>
+
+    {{#if userHasMultipleGroups}}
+    <td id={{src._id}}>{{src.group}}</td>
+    {{/if}}
+    <td id={{src._id}}>{{src.cat}}</td>
+    <td id={{src._id}}>{{src.buildOptions.buildmode}}</td>
+
+    <td id={{src._id}}>
+      {{FormatDate src.timestamp}}
+    </td>
+    <td id={{src._id}}>{{src.desc}}</td>
+  </tr>
+</template>
+
+<!-- Main page, root element -->
+<template name="TablesPage">
+  <section class="center-content">
+    <div class="pure-g">
+      <!-- Panel des Filtres -->
+      <div class="pure-u-1-6 pure-u-xl-1-8">
+        {{>searchArea}}
+        {{>SourceSelect}}
+      </div>
+
+      <!-- Center content (Tables)-->
+      <div class="pure-u-5-6 pure-u-xl-7-8">
+        {{>  SourceTable}}
+      </div>
+    </div>
+  </section>
+</template>
+
+
+
+
+
+<!-------------------------------------------->
+<!-- Filtres (groupes, type)                -->
+<!-------------------------------------------->
+<template name="SourceSelect">
+  <section class="scrollable-panel topics-side-list">
+
+    <section>
+        <h2>Type</h2>
+        <div class="search-by-tag">
+        <ul>
+          <li>
+            {{#each f in filters}}
+            <input id="{{f.id}}" type="checkbox" value="{{f.v}}" {{checked_filter f.id}} >
+            <label for="{{f.id}}" >{{f.label}}</label>
+            {{/each}}
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    {{#if userHasMultipleGroups}}
+    <h2>Groups</h2>
+    <section>
+      <ul>
+        <li>
+          <input id="allServers" type="checkbox" value="" {{no_group_checked}}>
+          <label for="allServers" class="allgroups pure-checkbox">Tous</label>
+        </li>
+        {{#each s in groups}}
+        <li>
+          <input id="{{s.name}}" class="onegroup" type="checkbox" value="" {{s.checked}} >
+          <label for="{{s.name}}" class="pure-checkbox">{{s.name}}</label>
+        </li>
+        {{/each}}
+      </ul>
+    </section>
+    {{/if}}
+
+
+  </section>
+</template>

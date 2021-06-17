@@ -1,0 +1,64 @@
+<!----------------------------------------->
+<!-- Fenetre Modale: template dynamique  -->
+<!----------------------------------------->
+<template name="ModalWindow">
+  <section class="export-modal">
+    <div class="modal-wrapper" id="bg">
+      <div class="modal-container">
+        {{> Template.dynamic template=templ}}
+      </div>
+    </div>
+  </section>
+</template>
+
+<!-- Si il n'y a pas de doc associé, ce sera une variable de session qui sera utilisée-->
+<template name="PopUpFileSettings">
+  {{#let fp=params}}
+
+    <h1 class="home-title">
+    {{#if build_settings}}
+      Build Settings
+    {{else}}
+      File Properties
+    {{/if}}
+    </h1>
+
+  <div class="modalForm">
+    {{#autoForm
+      id="filesettings"
+      schema=schemas.SourceCode
+      collection=collection
+      type="update"
+      doc=doc
+      template="plain"
+      buttonContent="update"
+      class="pure-form pure-form-stacked addForm1"}}
+
+      {{#if build_settings}}
+        {{> afQuickFields fields="buildOptions.buildmode"}}
+
+        {{#unless afFieldValueIs name="buildOptions.buildmode" value="lib"}}
+        {{> afQuickFields fields="buildOptions.entryPoint"}}
+        {{/unless}}
+
+        {{#if afFieldValueIs name="buildOptions.buildmode" value="lib"}}
+        {{> afQuickFields fields="buildOptions.filename"}}
+        {{/if}}
+
+        {{#if afFieldValueIs name="buildOptions.buildmode" value="dsk"}}
+        {{> afQuickFields fields="buildOptions.command,buildOptions.startPoint,buildOptions.endPoint"}}
+        {{/if}}
+
+
+      {{else}}
+        {{> afQuickFields fields="name"}}
+        {{> afQuickField name="group" options=userGroupList defaultValue="public"}}
+        {{> afQuickFields fields="author,desc,cat"}}
+      {{/if}}
+      <button class="pure-button pure-button-primary" type="submit">OK</button>
+
+      {{/autoForm}}
+  </div>
+
+  {{/let}}
+</template>

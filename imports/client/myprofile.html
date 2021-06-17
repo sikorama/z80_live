@@ -1,0 +1,16 @@
+<template name="MyProfile">
+
+  <h2 class="home-title">{{currentUser.username}} </h2>
+  {{#each ad in currentUser.mail}}
+  {{ad}}
+  {{/each}}
+
+  <h3 class="home-title">Mot de passe</h3>
+
+  <div class="pure-form login">
+    <fieldset class="pure-group">
+      {{> atForm state='changePwd'}}
+    </fieldset>
+  </div>
+
+</template>

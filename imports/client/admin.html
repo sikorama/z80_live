@@ -1,0 +1,299 @@
+<template name="AdminPage">
+  <section class="">
+
+    <div class="pure-g center-content">
+      <div class="pure-u-1-6 pure-u-xl-1-8">
+        <div class="pure-menu pure-menu-vertical">
+          <ul class="pure-menu-list ">
+            <li class="pure-menu-item">
+              <a href="/admin/sources" class="pure-menu-link">Sources</a>
+            </li>
+            <li class="pure-menu-item">
+              <a href="/admin/builds" class="pure-menu-link">Builds</a>
+            </li>
+            <li class="pure-menu-item">
+              <a href="/admin/groups" class="pure-menu-link">Groups</a>
+            </li>
+            <li class="pure-menu-item">
+              <a href="/admin/users" class="pure-menu-link">Users</a>
+            </li>
+            <li class="pure-menu-item">
+              <a href="/admin/settings" class="pure-menu-link">Configuration</a>
+            </li>
+            <li class="pure-menu-item">
+              <a href="/admin/session" class="pure-menu-link">Session</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+      <div class="pure-u-5-6 pure-u-xl-7-8">
+        <div class="">
+          {{> Template.dynamic template=sub}}
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+
+<template name="AdminSources">
+  <h1 class="home-title">Sources</h1>
+  <button id="dall"> Download all sources</button>
+
+</template>
+
+
+<template name="AdminSession">
+  <h1 class="home-title">Session Utilisateur Actuel</h1>
+  <div class="scrollable-search">
+    <table class="pure-table">
+      <thead>
+        <tr>
+          <th>Cle</th>
+          <th>Valeur</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each session_keys}}
+        <tr>
+          <td><b>{{k}}</b></td>
+          <td>{{v}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<template name="AdminSettings">
+  <h1 class="home-title">Configuration Serveur</h1>
+  <button class="resetSettings pure-button pure-button-primary"> Reset </button>
+  <div class="scrollable-search">
+    <table class="pure-table">
+      <thead>
+        <tr>
+          <th>Parametre</th>
+          <th>Valeur</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each p in params}}
+        <tr>
+          <td><b>{{p.param}}</b></td>
+          <td>
+            {{#if isTextArea p}}
+            <textarea id={{p.param}} style="min-width:300px;">{{p.value}}</textarea>
+            {{else}}
+            <input id={{p.param}} type="{{inputType p}}" {{inputValue p}} value="{{p.value}}">
+            {{/if}}
+          </td>
+          <td>{{p.desc}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<template name="AdminBuilds">
+  <h1 class="home-title">Builds</h1>
+  <button class="clearbuilds pure-button pure-button-primary"> Clear </button>
+
+  <div class="altern-lines">
+
+    <table class="pure-table pure-table-horizontal">
+      <thead>
+        <tr>
+          <th id="date">Date</th>
+          <th id="date">Session</th>
+          <th id="date">Source</th>
+          <th id="date">Type</th>
+          <th id="date">Status</th>
+          <th id="user">Utilisateur</th>
+          <th id="user">Result</th>
+          <th id="user">Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#let url=urlservfile}}
+        {{#each b in builds}}
+        <tr>
+          <td>
+            {{FormatDate b.date}}
+          </td>
+          <td>
+            {{b.session}}
+          </td>
+          <td>
+            <!-- Generaliser le lien , source a ouvrir avec la console-->
+            <a href="{{url}}/{{b.src}}">
+              {{b.src}}
+            </a>
+            {{stringify b.output}}
+
+          </td>
+          <td>
+            {{b.outputType}}
+          </td>
+          <td>
+            {{#if b.status}} Erreur {{b.status}} {{else}} OK {{/if}}
+          </td>
+          <td>
+            {{#if b.temp}}     
+            Guest {{else}} {{b.user}} {{/if}}
+          </td>
+
+          <td>
+            <div class="cmdresult">
+              {{b.stdout}}
+            </div>
+          </td>
+          <td>
+            <div class="cmdresult">
+              {{stringify b}}
+            </div>
+          </td>
+
+        </tr>
+        {{/each}}
+        {{/let}}
+
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<template name="AdminGroups">
+  <h1 class="home-title">Gestion des groupes</h1>
+  <button class="newitem pure-button pure-button-primary"> + </button>
+
+  <div class="">
+    <table class="pure-table pure-table-horizontal altern-lines">
+      <thead>
+        <tr>
+          <th id="name">
+            Nom du groupe
+          </th>
+          <th id="infos">
+            Description
+          </th>
+          <th id="occsources">
+            #Sources
+          </th>
+          <th id="occusers">
+            #Utilisateur
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each g in groups}}
+        <tr>
+          <td>
+          {{g.name}}
+        </td>
+        <td>
+          {{g.desc}}
+        </td>
+        <td>
+          {{numSource g.name}}
+        </td>
+        <td>
+          {{numUsers g.name}}
+        </td>
+      </tr>
+
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<template name="AdminUsers">
+  <div class="pure-g">
+    <div class="pure-u-5-8">
+      <div class="online">
+        <div class="home-title">Utilisateurs
+          {{#unless form_insertMode}}
+          <div class="align-right">
+            <button class="pure-button pure-button-primary" id="newuser">+</button>
+          </div>
+          {{/unless}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pure-g">
+    <div class="pure-u-5-8 scrollable-search">
+      <table class="pure-table">
+        <thead>
+          <tr>
+            <th id="name">Utilisateur</th>
+            <th id="email">Email</th>
+            <th id="roles">Role(s)</th>
+            <th id="groupes">Groupe(s)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each userList}}
+          <tr class="">
+            <td id="{{_id}}">
+              <span class="{{statusClass status}}">&#11044;</span> {{username}}
+            </td>
+            <td id="{{_id}}">{{#each emails}} {{address}} {{/each}}</td>
+            <td id="{{_id}}">{{#each role in roles}}{{role}} {{/each}}</td>
+            <td id="{{_id}}">{{#each group in groups}}{{group}} {{/each}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pure-u-3-8 scrollable-form">
+      <section class="fiche-forme">
+        {{#unless doc}}
+        <h1 class="home-title">Ajouter un Utilisateur</h1>
+        <div>
+          <div class="addForm1">
+            {{#autoForm id="addUserForm" formPreserve=true doc=doc schema=schemas.Users type="method" meteormethod="insertUser" buttonContent="Ajouter"}}
+            {{> afQuickField name="roles" }}
+            {{> afQuickField name="groups" options=groupList}}
+            {{> afQuickFields omitFields='roles,groups'}}
+            <div>
+              <button type="submit" class="btn btn-primary">Valider l'ajout</button>
+                </div>
+            {{/autoForm}}
+          </div>
+        </div>
+        {{else}}
+        <h1 class="home-title">Modification {{doc.username}}</h1>
+        <div class="addForm1">
+          {{#autoForm id="updateUserForm" formPreserve=true doc=doc schema=schemas.Users type="method-update" meteormethod="updateUser" buttonContent="Ajouter"}}
+         <!--
+         {{> afQuickField name="username" }}
+          {{> afQuickField name="emails" }}
+         -->
+         {{> afQuickField name="roles" }}
+          {{> afQuickField name="groups" options=groupList}}
+          <button type="submit" class="btn btn-primary">Valider</button>
+          {{/autoForm}}
+        </div>
+
+        <h1 class="home-title">Changer le mot de passe </h1>
+        <p>Pour l'utilisateur: {{doc.username}}</p>
+        <div>
+          {{#autoForm id="changePasswordForm" formPreserve=true doc=doc schema=schemas.Users type="method" meteormethod="forcePassword" buttonContent="Ajouter"}}
+            {{> afQuickField name="password" }}
+            <div>
+              <button type="submit" class="btn btn-primary">Valider</button>
+            </div>
+            {{/autoForm}}
+
+        </div>
+        {{/unless}}
+
+      </section>
+    </div>
+  </div>
+</template>

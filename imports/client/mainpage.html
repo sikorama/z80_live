@@ -1,0 +1,110 @@
+<!-- Loadin template, empty by default-->
+<template name="loading">
+  <div class="pure-form login">
+    <fieldset class="pure-group">
+      Chargement...
+    </fieldset>
+  </div>
+</template>
+
+<!-- Main Page Template -->
+<template name="Page">
+      <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+
+  <div>
+    {{> PageTop}}
+    {{#if notifications}}
+      <div class="notif" id="oNote">
+       {{#each notif in notifications}}
+          <div id={{notif.id}} class="{{notif.type}} notif-anim">
+            {{notif.label}}
+          </div>
+        {{/each}}
+      </div>
+      {{/if}}
+      {{> Template.dynamic template=main}}
+      <div class="pure-u-5-8 pure-u-xl-2-3">
+        <h1></h1>
+        {{#if dialog_active}}
+          {{>ModalWindow templ=dialog_template}}
+        {{/if}}
+      </div>
+
+  </div>
+</template>
+
+<template name="LoginForm">
+  <div class="pure-form login" id="loginform">
+    {{>loginButtons }}
+  </div>
+</template>
+
+
+<!-- Common part, with top menu -->
+<template name="PageTop">
+  <nav class="pure-menu pure-menu-horizontal main-menu">
+    {{#unless isMobile}}
+    <a class="pure-menu-heading pure-menu-link" href="/">
+      {{#if isSessionVarDefined "logoFile"}}
+      <img src="{{getSessionVar "logoFile"}}" alt="" />
+      {{/if}}
+      <div class="ko">{{getSessionVar "logoText"}}</div>
+    </a>
+    {{/unless}}
+
+    <ul class="pure-menu-list main-menu-list">
+      <li class="pure-menu-item">
+        <a href="/browse" class="pure-menu-link {{active "browse"}}">Sources</a>
+      </li>
+
+      <li class="pure-menu-item">
+        <a href="/edit" class="pure-menu-link {{active "edit"}}">Edit</a>
+      </li>
+
+      <li class="pure-menu-item">
+        <a href="/doc" class="pure-menu-link {{active "doc"}}">Doc</a>
+      </li>
+
+      {{#if isUserRole "admin"}}
+      <li class="pure-menu-item">
+       <a href="/admin" class="pure-menu-link {{active "admin"}}">Admin</a>
+     </li>
+      {{/if}}
+    </ul>
+
+ 
+    <ul id="menu-user">
+
+      {{#if currentUser}}
+
+      <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+        <a href="#" class="pure-menu-link">
+            {{currentUser.username}}
+        </a>
+        <ul class="pure-menu-children">
+            <li class="pure-menu-item">
+              <a href="/" id="logout" class="pure-menu-link">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>Disconnect
+              </a>
+            </li>
+            <li class="pure-menu-item">
+              <a href="/profile" class="pure-menu-link">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>My Profile
+              </a>
+            </li>
+ 
+          <li class="pure-menu-item">
+            <a href="/doc#contact" class="pure-menu-link">
+              <i class="fa fa-envelope-o" aria-hidden="true"></i>Contact
+            </a>
+          </li>
+        </ul>
+      </li>
+      {{else}}
+      <li class="pure-menu-item pure-menu-has-children">
+        {{>loginButtons align="right"}}
+      </li>
+      {{/if}}
+    </ul>
+  </nav>
+</template>

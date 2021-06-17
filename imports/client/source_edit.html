@@ -1,0 +1,119 @@
+<!-- Vue avec les infos complete sur une fiche residence. -->
+<template name="SourceEdit">
+  <div class="pure-g">
+    {{#if Template.subscriptionsReady}}
+    {{#let code=getCode}}
+    <div class="dashboard-cell pure-u-1 pure-u-sm-1 pure-u-md-1-2 pure-u-lg-1-2">
+      <div class="dashboard-incell dashboard-center-text">
+        <section class="">
+          <fieldset>
+            <legend>
+              <h1 class="home-title">
+                <span title="Build Settings" class="buildsettings">&#x2699;</span>
+
+                {{#if code._id}}
+                <span title="{{code.name}} by {{code.author}} {{code.desc}}
+{{#if canEdit}}Click here to change source name, group, description...{{/if}}" class="filesettings">
+                  {{code.name}}
+                </span>
+
+                <!-- Vote is only for other people source code -->
+                {{#if currentUser}}
+                {{#unless isOwner}}
+                {{>Stars id=code._id}}
+                {{/unless}}
+                {{/if}}
+
+                {{else}}
+
+                Source Code
+                {{/if}}
+                <!-- &#x2710; &#x2699; &#x22D9; &#x22EF; &#x21b3;-->
+              </h1>
+            </legend>
+            {{>CodeMirror id="source" name="someName" options=editorOptions code=code.code}}
+          </fieldset>
+
+          {{#if currentUser}}
+
+            {{#if sessionVarTrue "srcFromDB"}}
+              {{#if canEdit}}
+              <button id="updatebtn"
+                class="updatebtn pure-button {{#if sessionVarTrue "srcChanged"}}pure-button-primary{{/if}}">Save
+              </button>
+              {{/if}}
+              {{#if canEdit}}
+              <button id="delbtn" class="updatebtn pure-button pure-button-primary ko">Delete</button>
+              {{/if}}
+            {{/if}}
+
+            <button title="Fork this source code, so you can edit and save it!" id="duplicatebtn" class="updatebtn pure-button pure-button-primary">
+              Fork
+            </button>
+
+            <button title="New source code" id="newbtn" class="updatebtn pure-button pure-button-primary">New</button>
+
+          {{/if}}
+
+        </section>
+      </div>
+    </div>
+
+    <div class="dashboard-cell pure-u-1 pure-u-sm-1 pure-u-md-1-2 pure-u-lg-1-2">
+      <div class="dashboard-incell dashboard-center-text">
+        <fieldset>
+          <legend>
+            <h1 class="home-title">Emulation</h1>
+          </legend>
+          {{#if sessionVarTrue "displayEmu"}}
+          {{#let turl=(getSessionVar "tinyCPCURL")}}
+          {{#let emuf = emufile}}
+          {{#if emuf}}
+          <embed width=100%; height=400px; src="{{turl}}?file={{emuf.cmd}}&joystick=true">
+          <p>
+            <a href="{{turl}}?file={{emuf.cmd}}&joystick=true" target="TinyCPC">
+              Fullscreen
+            </a>
+            -
+            <a href="{{emuf.file}}">
+              Download
+            </a>
+          </p>
+          {{/if}}
+          {{/let}}
+          {{/let}}
+
+          {{#let b =buildResult}}
+          {{#if b}}
+          {{#if showResult b}}
+          <ul>
+            {{#each l in b.stdout}}
+            <li class="cmdresult">
+              {{l}}
+            </li>
+            {{/each}}
+          </ul>
+          {{/if}}
+          {{/if}}
+          {{/let}}
+          {{/if}}
+
+        </fieldset>
+
+        <button id="emul" class="emulbtn pure-button pure-button-primary">RUN</button>
+        <button id="auto" class="pure-button pure-button-primary {{autobuildclass}}">Auto</button>
+        <!--        <button id="ui" class="pure-button pure-button-primary {{uiclass}}">UI</button> -->
+
+      </div>
+    </div>
+
+    {{/let}}
+    {{/if}}
+  </div>
+
+
+</template>
+
+<template name="ClearSource">
+  ...
+</template>
