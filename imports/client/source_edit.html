@@ -19,9 +19,7 @@
 
                 <!-- Vote is only for other people source code -->
                 {{#if currentUser}}
-                {{#unless isOwner}}
                 {{>Stars id=code._id}}
-                {{/unless}}
                 {{/if}}
 
                 {{else}}
