@@ -23,7 +23,7 @@ export function init_assembler() {
             SourceBuilds.remove({sessionId: cnx.id});
             
           } catch(e) {
-            console.error(e);
+            console.error('Exception', e);
           }    
         })
       });
@@ -151,13 +151,11 @@ export function init_assembler() {
                 //
                 const post_req = http.request(post_options, Meteor.bindEnvironment(function (res) {
                     res.setEncoding('utf8');
-                    //console.error(res);
                     res.on('data', function (chunk) {
                         resp += chunk;
                     });
 
                     res.on('end', Meteor.bindEnvironment(function () {
-                        //console.info('RESP=', resp);
                         try {
                             let ores = JSON.parse(resp);
                             // C'est la qu'on met a jour une DB avec le resultat et la date de build?
@@ -169,7 +167,6 @@ export function init_assembler() {
                             ores.header = s0;
                             ores.footer = s1;
 
-                            //console.info('build result: inserting', ores);
                             SourceBuilds.insert(ores);
                         } catch (e) {
                             console.error(e.stack, resp);
@@ -179,7 +176,7 @@ export function init_assembler() {
 
                 if (post_req) {
                     post_req.on('error', function (errd) {
-                        console.error(errd);
+                        console.error('POST Request Error:', errd);
                     });
 
                     post_req.write(source);
@@ -189,7 +186,7 @@ export function init_assembler() {
                 return buildId; // Pour faire la recherche
 
             } catch (e) {
-                console.error(e);
+                console.error('Assemble :', e);
                 return 0;
             }
         },

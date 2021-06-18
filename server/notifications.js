@@ -62,7 +62,6 @@ exports.init_notifications = function () {
         let token = getParam('rocketToken');
 
         let urlWebHook_rocket = url + '/hooks/' + token;
-        //console.error('sendRocket', payload, 'to', urlWebHook_rocket);
 
         httpreq.post(urlWebHook_rocket, {
           json: payload

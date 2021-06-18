@@ -167,8 +167,6 @@ export function init_publications() {
 
   SourceAsm.before.insert(function (userid, doc) {
     doc.timestamp = Date.now();
-
-    console.error('before insert doc', doc)
   });
 
   SourceAsm.before.update(function (userid, doc, fieldNames, modifier, options) {
@@ -323,9 +321,13 @@ export function init_publications() {
         ds -= v.score;
         dv = 0;
       }
+      // Udate User's vote
       UserRatings.upsert({ user: this.userId, srcid: srcid }, { $set: { score: score } });
+      // Update source's score
       let s = SourceAsm.findOne(srcid);
-      let new_rank = (s.score + ds) / (s.numvotes + dv)
+      let new_rank = score;
+      if (s.numvotes)
+       new_rank = (s.score + ds) / (s.numvotes + dv);
       SourceAsm.update(srcid, { $inc: { score: ds, numvotes: dv }, $set: { rank: new_rank } });
     }
   })

@@ -146,7 +146,7 @@ Template.SourceEdit.helpers({
       if (FlowRouter.getParam('sourceId')) {
         //if (Session.equals('displayPrebuilt', true))
         {
-          const src = SourceAsm.findOne(FlowRouter.getParam('sourceId')());
+          const src = SourceAsm.findOne(FlowRouter.getParam('sourceId'));
           //console.error('source = ', src, FlowRouter.getParam('sourceId')());
           if (src) {
             const sb = SourceBuilds.findOne({
@@ -317,6 +317,7 @@ Template.SourceEdit.events({
   "click .updatebtn": function (event) {
     let tid = event.target.id;
     let doc = {};
+    const sid = FlowRouter.getParam('sourceId'); 
 
     // Comment mettre a jour le contenu de l'éditeur?
     if (tid === 'newbtn') {
@@ -327,16 +328,15 @@ Template.SourceEdit.events({
 
     // Save/Update
     if (tid === 'updatebtn') {
-      if (FlowRouter.getParam('sourceId')) {
-        updateSource(FlowRouter.getParam('sourceId');
+      if (sid) {
+        updateSource(sid);
       }
     }
 
     if (tid === 'delbtn') {
-      if (FlowRouter.getParam('sourceId')) {
-        //        console.error(FlowRouter.getParam('sourceId')());
+      if (sid) {
         if (confirm('Are you sure you want to delete this source file?') === true) {
-          SourceAsm.remove(FlowRouter.getParam('sourceId');
+          SourceAsm.remove(sid);
           FlowRouter.go('/clear/');
         }
       }
@@ -349,7 +349,6 @@ Template.SourceEdit.events({
       doc.buildOptions = Session.get('buildSettings');
       Meteor.call('insertSource', doc, function (err, id) {
         console.error('insert Source: err=', err, 'data=', id);
-        console.error(id);
         if (id) {
           Session.set('dialog_param', {
             id: id,
@@ -403,7 +402,7 @@ Template.SourceEdit.events({
     }
     if (event.key == 's' && event.ctrlKey) {
       if (FlowRouter.getParam('sourceId')) {
-        updateSource(FlowRouter.getParam('sourceId');
+        updateSource(FlowRouter.getParam('sourceId'));
       }
       return false;
     }
