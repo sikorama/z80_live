@@ -328,7 +328,7 @@ Template.SourceEdit.events({
     // Save/Update
     if (tid === 'updatebtn') {
       if (FlowRouter.getParam('sourceId')) {
-        updateSource(FlowRouter.getParam('sourceId')());
+        updateSource(FlowRouter.getParam('sourceId');
       }
     }
 
@@ -336,7 +336,7 @@ Template.SourceEdit.events({
       if (FlowRouter.getParam('sourceId')) {
         //        console.error(FlowRouter.getParam('sourceId')());
         if (confirm('Are you sure you want to delete this source file?') === true) {
-          SourceAsm.remove(FlowRouter.getParam('sourceId')());
+          SourceAsm.remove(FlowRouter.getParam('sourceId');
           FlowRouter.go('/clear/');
         }
       }
@@ -403,7 +403,7 @@ Template.SourceEdit.events({
     }
     if (event.key == 's' && event.ctrlKey) {
       if (FlowRouter.getParam('sourceId')) {
-        updateSource(FlowRouter.getParam('sourceId')());
+        updateSource(FlowRouter.getParam('sourceId');
       }
       return false;
     }
