@@ -31,9 +31,9 @@ Template.PopUpFileSettings.onRendered(function () {
 });
 
 Template.PopUpFileSettings.helpers({
-  collection: function() { return SourceAsm; },
+  collection() { return SourceAsm; },
   // Récupere le document
-  doc : function() {
+  doc() {
     let param = Session.get('dialog_param');
     let res;
     // TODO: Si on n'est pas logué,
@@ -47,18 +47,32 @@ Template.PopUpFileSettings.helpers({
     }
     return res;
   },
-  build_settings: function() {
+  build_settings() {
     let param = Session.get('dialog_param');
     return (param.mode==='build');
+  },
+  formtype() {
+    if (Meteor.user()) return 'update';
+    return 'normal';
   }
 });
 
 
 Template.PopUpFileSettings.events({
-  "submit": function (event) {
+  "click button,submit": function (event) {
+    console.error('SUBMIT');
     // Fermeture popup
     Session.set('dialog_template',undefined );  
-    let d = Session.get('dialog_param');
+    // Either we get form's data
+    // And store to buildSetting
+  
+    let doc = AutoForm.getFormValues('filesettings');
+    console.error(doc);
+    if (doc.insertDoc.buildOptions) {
+      Session.set('buildSettings', doc.insertDoc.buildOptions);
+      console.error(doc.insertDoc.buildOptions);
+    }
+
     //return false;
   }
 });

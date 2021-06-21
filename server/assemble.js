@@ -46,7 +46,6 @@ export function init_assembler() {
                 // Ce qui est plus général que:
                 //source = source.replace(/[éèê]/g, 'e');
 
-                let remote_asm = false;
                 let post_function = '/build'
 
                 console.info('Assemble settings:', settings);
@@ -64,16 +63,13 @@ export function init_assembler() {
                 // ---------- Remote?
                 switch (settings.buildmode) {
                     case 'lib':
-                        remote_asm = true;
                         post_function = '/store';
                         break;
                     case 'raw':
-                        remote_asm = true;
                         break;
                     case 'bin':
                         if (!settings.startPoint)
                             settings.startPoint = "#1000";
-                        remote_asm = true;
                         s0.push('ORG ' + settings.startPoint);
                         //source = source;
                         break;
@@ -90,8 +86,6 @@ export function init_assembler() {
                         if (!settings.endPoint)
                             settings.endPoint = '_default_end';
 
-                        remote_asm = true;
-
                         if (settings.entryPoint)
                             s0.push('RUN ' + settings.entryPoint);
                         s0.push('_default_start:');
@@ -100,7 +94,8 @@ export function init_assembler() {
                         s1 = s1 + "SAVE '-RUN.BIN'," + settings.startPoint + ',' + settings.endPoint + '-' + settings.startPoint + ',DSK,' + "'" + settings.filename + ".dsk' \n"
                         break;
                     default:
-                        settings.buildmode = 'sna';
+                    settings.buildmode = 'sna';
+
                     case 'sna':
 
                         if (!settings.startPoint)
@@ -119,16 +114,27 @@ export function init_assembler() {
 
                         //                        source = s0 + source;
                         break;
+   		    case 'z80':
+		    // ZX80 file
+		    // HOBETA?
+                    s0.push('BUILDZX');
+                    s0.push('BANK 0');
+                    
+                    //s0.push('HOBETA');
+                    //s0.push('ORG ' + settings.startPoint);
+
+		    if (!settings.entryPoint)
+                        settings.entryPoint = settings.startPoint;
+
+		    if (settings.entryPoint != 'none')
+                        s0.push('RUN $');
+		    
+		    break;
                 }
 
                 let hs = '';
                 s0.forEach((item) => { hs += item + '\n'; });
                 source = hs + source + s1;
-
-                if (remote_asm != true) {
-                    console.error('Remote assembling Not Allowed');
-                    return ('Not Allowed');
-                }
 
                 // Envoi d'un post au serveur de build
                 let rurl = encodeURIComponent(getParam('buildServerURL'));

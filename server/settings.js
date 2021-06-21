@@ -45,8 +45,10 @@ function defaultParams() {
   initParam('buildServerURL', '127.0.0.1','Private URL for assembling server');
   initParam('buildServerPort', '8000', 'Assembling server port');
   initParam('fileServerURL', 'rasm.amstrad.info','URL pour le serveur de fichiers (public)');
-  initParam('tinyCPCURL', 'open.amstrad.info/TinyCPC/cpc.html','Public URL for Tiny CPC');
-  initParam('tinyCPCURL_UI', 'open.amstrad.info/TinyCPC/cpc-ui.html','Public URL for Tiny CPC (UI version)');
+  initParam('tinyCPCURL', 'rasm.amstrad.info/tiny8bit/cpc.html','Public URL for Tiny CPC');
+  initParam('tinyCPCURL_UI', 'rasm.amstrad.info/tiny8bit/cpc-ui.html','Public URL for Tiny CPC (UI version)');
+  initParam('tinyZXURL', 'rasm.amstrad.info/tiny8bit/zx.html','Public URL for Tiny ZX');
+  initParam('tinyZXURL_UI', 'rasl.amstrad.info/tiny8bit/zx-ui.html','Public URL for Tiny ZX (UI version)');
   initParam('rocketIP', '', 'Rocket chat for notification'); 
   initParam('rocketToken', '', 'Token for rocket chat notification');
   initParam('rocketNotifStart', false, 'Notify server start');

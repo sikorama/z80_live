@@ -1,13 +1,8 @@
 /**
  * Gestion des utilisateurs, coté serveur
  */
-import {
-  Meteor
-} from 'meteor/meteor'
-
-import {
-  SourceGroups
-} from '../imports/api/sourceAsm.js';
+import { Meteor } from 'meteor/meteor';
+import { SourceGroups } from '../imports/api/sourceAsm.js';
 
 //Renvoie vrai si l'utilisateur est un admin
 //Faire une fonction generale avec differents roles que l'on peut tester (cf api/roles.js?)
@@ -18,7 +13,7 @@ export function hasRole(userId, roles) {
     });
 
     if (user) {
-      // Bypass pour les superadmins
+      // Bypass for superadmin
       if (user.roles != undefined) {
 
         if (user.roles.indexOf("superadmin") >= 0) return true;
@@ -38,27 +33,24 @@ export function hasRole(userId, roles) {
   return false;
 }
 
-// Raccourci pour tester si on est admin
+// Shortcut for checing if a user is an admin
 export function isAdmin(userId) {
   return hasRole(userId, ['admin']);
 }
 
-// Recuper les groupes associés a un userId
+// Get user's groups
 export function getUserGroups(userId) {
   const user = Meteor.users.findOne({
     '_id': userId
   });
   if (!user) return [];
   const userg = user.groups;
-  // Si pas de groupe => pas de resulat? ou 'default' ?
-  if (userg === undefined) return [];
+  if (!userg) return [];
   return userg;
 }
 
-
 export function setUserGroups(userid, groups) {
   console.warn('Set User Group', userid, groups);
-  // Ajouter groups ici?
   if (groups != undefined)
     Meteor.users.update(userid, {
       $set: {
@@ -73,42 +65,54 @@ export function setUserRoles(userid, roles) {
     Roles.setUserRoles(userid, roles);
 };
 
-//doc: username, mail, password, roles, groups
+/**
+ * 
+ * @param {*} doc : contains: username, mail, password, roles, groups 
+ */
 export function addUser(doc) {
-  // TODO: filtrer les role, groupes, etc.. pour que ce soit légal
+  if (!doc) return;
+  if (!doc.username) return;
 
-  // On créé un groupe associé a l'utilisateur
-  //SourceGroups.insert({ name: doc.username, desc: 'Groupe pour '+doc.username });
-  SourceGroups.upsert({ name: doc.username }, { name: doc.username, desc: 'Groupe pour ' + doc.username });
-  doc.groups.push(doc.username);
-
-  const u = Meteor.users.findOne({
+  // Check if user already exists
+  // Otherwise, create a new user
+  let u = Meteor.users.findOne({
     'username': doc.username
   });
 
+  doc.groups=doc.groups || [];
+  doc.groups.push(doc.username);
+
   if (u === undefined) {
 
-    Accounts.createUser({
+    // Create a group for the user
+    SourceGroups.upsert({ name: doc.username }, { name: doc.username, desc: 'Private group for ' + doc.username });
+
+    u = Accounts.createUser({
       'username': doc.username,
       'email': doc.email,
       'password': doc.password,
       'autobuild': 1500,
       profile: {
         //publicly visible fields like firstname goes here
-        // Modifiable par l'utilisateur lui meme
+        //Canbe changes by the user
       },
       'groups': doc.groups
     });
 
-    const user = Meteor.users.findOne({
-      'username': doc.username
-    });
-
-    setUserGroups(user._id, doc.groups);
-    setUserRoles(user._id, doc.roles);
+//    u = Meteor.users.findOne({
+//      'username': doc.username
+//    });
+    if (u) {
+      setUserGroups(u._id, doc.groups);
+      setUserRoles(u._id, doc.roles);
+    }
+    else {
+      console.error('ERROR: User not created');
+    }
   }
 }
 
+// Handy/Quick add user function
 function qaddUser(name, mail, pw, roles, groups) {
   addUser({
     username: name,
@@ -120,11 +124,12 @@ function qaddUser(name, mail, pw, roles, groups) {
   });
 }
 
-
-// Ajout des comptes utilisateurs par defaut
-// Inciter a changer demo de passe
+// Add default Accounts (if none exists)
+// TODO: Check if there is no superadmin
+// FIXME: ask for changing password...
 function createDefaultAccounts() {
-  qaddUser('admin', 'admin@rasmlive.amstrad.info', 'password', ['admin', 'superadmin'], ['public']);
+  if (Meteor.users.find().count()===0)
+    qaddUser('admin', 'admin@rasmlive.amstrad.info', 'password', ['admin', 'superadmin'], ['public']);
 };
 
 export function init_users() {
@@ -135,7 +140,6 @@ export function init_users() {
         // Ajout de l'utilisateur
         addUser(doc);
       }
-
     },
     updateUser: function (doc) {
       if (isAdmin(this.userId)) {
@@ -171,11 +175,11 @@ export function init_users() {
           }
 
           //console.error('modifier', doc.modifier);
-
           Meteor.users.update(doc._id, doc.modifier);
         }
       }
     },
+    // An Admin can set a user password
     forcePassword: function (doc) {
       if (isAdmin(this.userId)) {
         try {
@@ -211,5 +215,4 @@ export function init_users() {
   });
 
   createDefaultAccounts();
-
 }

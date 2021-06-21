@@ -11,28 +11,13 @@
 
 */
 
-import {
-  Meteor
-} from 'meteor/meteor'
-
-import {
-  SourceAsm, SourceBuilds, SourceGroups, UserRatings
-} from '../imports/api/sourceAsm.js';
-
-import {
-  Settings
-} from '../imports/api/settings-server.js';
-
-import {
-  getUserGroups,
-  hasRole,
-  isAdmin,
-}
-  from './user_management.js';
-
+import { Meteor } from 'meteor/meteor';
+import { Settings } from '../imports/api/settings-server.js';
+import { SourceAsm, SourceBuilds, SourceGroups, UserRatings } from '../imports/api/sourceAsm.js';
 import { sendNotifRocket } from './notifications.js';
+import { getUserGroups, isAdmin } from './user_management.js';
 
-
+/*
 // Verification que l'on est autorisé a recuperer
 // des elements sur un source donnée
 // renvoie undefined ou la description du source
@@ -48,8 +33,9 @@ function checkSourceGroup(mhid, userId) {
   });
   return res;
 }
+*/
 
-// Déclaration de toutes les publications
+// All Publications Declarations
 export function init_publications() {
   Meteor.methods({
     // Create a new source, with default values
@@ -86,6 +72,7 @@ export function init_publications() {
       return false;
     },
 
+    // Deprecated as builds are automatically removed when a user session is over
     clearBuilds: function () {
       console.error('Removing all builds');
       SourceBuilds.remove({});
@@ -110,7 +97,7 @@ export function init_publications() {
     });
   });
 
-  // Pour avoir la liste des source, et des reglages, mais pas le code
+  // Publication for retrieving source data, except code (for source table)
   Meteor.publish('sourceInfos', function (srcid) {
     let grp = ['public'];
     if (this.userId)
@@ -129,25 +116,25 @@ export function init_publications() {
   });
 
 
-  // TODO: verifier les roles
   SourceAsm.allow({
     insert(userid, doc) {
+      // Logger users can create new sources
       if (userid) return true;
     },
     update(userid, doc) {
       if (userid) {
+        // Admins and owners are allower to change a source
         if (doc.owner === userid) return true;
         if (isAdmin(userid)) return true;
+        // If no owner, we allow too
         if (!doc.owner) return true;
+        return false;
       }
-
-      //if (userid) return true;
     },
     remove(userid, doc) {
       if (userid)
         if (doc.owner === userid) return true;
       if (isAdmin(userid)) return true;
-
       return false;
     }
   });
@@ -169,15 +156,14 @@ export function init_publications() {
     doc.timestamp = Date.now();
   });
 
-  SourceAsm.before.update(function (userid, doc, fieldNames, modifier, options) {
-    modifier.$set = modifier.$set || {};
-    let d = Date.now();
-    modifier.$set.timestamp = d;
+  SourceAsm.before.update(function (userid, doc, fieldNames, modifier, options) {    
+    // If there is no owner, add a new one
+    // This should not happend
     if (!doc.owner) {
+      modifier.$set = modifier.$set || {};
       modifier.$set.owner = userid;
       if (modifier.$unset)
         modifier.$unset.owner = undefined;
-
     }
   });
 

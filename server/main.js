@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import { AccountsTemplates } from 'meteor/useraccounts:core';
 import { SourceAsm, SourceGroups } from '../imports/api/sourceAsm.js';
 import { init_assembler } from './assemble.js';
 import { init_notifications } from './notifications.js';
@@ -7,15 +6,14 @@ import { init_publications } from './publications.js';
 import { getParam, init_settings } from './settings.js';
 import { init_users } from './user_management.js';
 
-AccountsTemplates.configure({
-  forbidClientAccountCreation: false, //  true,
-  enablePasswordChange: true,
-  showForgotPasswordLink: false,
-});
+
+
+//  AccountsTemplates.init();
 
 // Code a executer au démarrage du serveur
 Meteor.startup(() => {
   try {
+
     // Parametres du serveur Meteor
     init_settings();
 
@@ -87,13 +85,13 @@ Meteor.methods({
     });
     archive.pipe(outputStreamBuffer);
 
-    SourceAsm.find().forEach(function(item) {
-      archive.append(item.code, { name: item.name+'.asm' });
+    SourceAsm.find().forEach(function (item) {
+      archive.append(item.code, { name: item.name + '.asm' });
     })
 
     archive.finalize();
 
-    archive.on('finish', function() {
+    archive.on('finish', function () {
       //      cb(null, JSON.stringify(outputStreamBuffer.getContents())); //"errprout","data");
       outputStreamBuffer.end();
       cb(null, outputStreamBuffer.getContents());

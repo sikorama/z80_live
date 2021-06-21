@@ -32,7 +32,7 @@ Schemas.BuildSettings = new SimpleSchema({
     label: 'Build Mode',
     optional: false,
     defaultValue: 'sna',
-    allowedValues: ["raw", "sna","dsk"] //,'lib'],
+    allowedValues: ["raw", "sna","dsk","z80"] //,'lib'],
   },
   entryPoint: {
     type: String,

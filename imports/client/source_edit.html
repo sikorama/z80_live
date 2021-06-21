@@ -43,11 +43,15 @@
               {{#if canEdit}}
               <button id="delbtn" class="updatebtn pure-button pure-button-primary ko">Delete</button>
               {{/if}}
-            {{/if}}
-
-            <button title="Fork this source code, so you can edit and save it!" id="duplicatebtn" class="updatebtn pure-button pure-button-primary">
-              Fork
-            </button>
+              {{/if}}
+              
+              <button title="Fork this source code, so you can edit and save it!" id="duplicatebtn" class="updatebtn pure-button pure-button-primary">
+                {{#if sessionVarTrue "srcFromDB"}}
+                Fork
+                {{else}}
+                Save as New
+                {{/if}}
+              </button>
 
             <button title="New source code" id="newbtn" class="updatebtn pure-button pure-button-primary">New</button>
 
@@ -64,12 +68,12 @@
             <h1 class="home-title">Emulation</h1>
           </legend>
           {{#if sessionVarTrue "displayEmu"}}
-          {{#let turl=(getSessionVar "tinyCPCURL")}}
           {{#let emuf = emufile}}
           {{#if emuf}}
-          <embed width=100%; height=400px; src="{{turl}}?file={{emuf.cmd}}&joystick=true">
+          
+          <embed width=100%; height=400px; src="{{turl}}?file={{emuf.cmd}}{{options}}">
           <p>
-            <a href="{{turl}}?file={{emuf.cmd}}&joystick=true" target="TinyCPC">
+            <a href="{{turl}}?file={{emuf.cmd}}{{options}}" target="TinyCPC">
               Fullscreen
             </a>
             -
@@ -78,7 +82,6 @@
             </a>
           </p>
           {{/if}}
-          {{/let}}
           {{/let}}
 
           {{#let b =buildResult}}

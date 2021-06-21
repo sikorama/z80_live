@@ -33,6 +33,8 @@ Meteor.call('getParam', 'fileServerURL', function(err,res) {Session.setDefault('
 /// Urls to TinyCPC 
 Meteor.call('getParam', 'tinyCPCURL', function(err,res) {Session.setDefault('tinyCPCURL', res);});
 Meteor.call('getParam', 'tinyCPCURL_UI', function(err,res) {Session.setDefault('tinyCPCURL_UI', res);});
+Meteor.call('getParam', 'tinyZXURL', function(err,res) {Session.setDefault('tinyZXURL', res);});
+Meteor.call('getParam', 'tinyZXURL_UI', function(err,res) {Session.setDefault('tinyZXURL_UI', res);});
 
 Session.setDefault('dumpFormat', 'basic');
 Session.setDefault('buildSettings', {buildmode: 'sna'});
