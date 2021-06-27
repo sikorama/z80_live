@@ -285,34 +285,6 @@ input[type="text"]:focus{
 	margin: 0;
 }
 
-/*
-.switcher{
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	z-index: 2;
-	bottom: 15px;
-}
-.switcher a{
-	font-size: 15px;
-	padding-bottom: 10px;
-	font-weight: 600;
-	text-transform: uppercase;
-	color: #324762;
-}
-.switcher a:hover,
-.switcher a:active,
-.switcher a:focus
-{
-	text-decoration: none;
-}
-.switcher a.active{
-	border-bottom: 3px solid #27cd6b;
-}
-.switcher a + a {
-	margin-left: 30px;
-}
-*/
 
 /* END SUB HEADER */
 
@@ -642,67 +614,6 @@ th{
 	to {  }
 }
 
-
-
-
-
-/* LOGIN */
-/*
-.login {
-	display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  position: fixed;
-  width: 100%;
-	background-color: #f1f4f8;
-	font-family: 'Source Sans Pro';
-}
-.login-wrapper{
-	position: relative;
-	background-color: #ffffff;
-	width: 350px;
-}
-.login-wrapper img{
-	position: absolute;
-	top: -90px;
-	left: 50%;
-	transform: translateX(-50%);
-	max-width: 100%;
-	height: 48px;
-}
-.login-container {
-	padding: 40px;
-	margin: 0;
-	color: #99a5b7;
-}
-.login-container .at-title h3{
-	color: #324762;
-	font-size: 27px;
-}
-.login-container label,
-.login-container input,
-.login-container button{
-	display: block;
-	width: 100%;
-}
-.login-container input,
-.login-container button{
-	height: 40px;
-}
-.login-container label{
-	font-size: 14px;
-}
-.login-container button{
-	border-radius: 3px;
-	background-color: #27cd6b;
-	border: none;
-	color: #ffffff;
-	font-size: 15px;
-}
-
-*/
-
 .login-form {
 	white-space: normal;
 }
@@ -797,7 +708,6 @@ input:-webkit-autofill {
 .filesettings {
 	cursor: pointer;
 }
-
 
 .stars {
  font-size: large;
