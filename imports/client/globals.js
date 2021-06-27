@@ -198,11 +198,12 @@ function setHeight() {
   setElementHeight('scrollable-search', 'scrollable-search-status', 24);
 
   // TODO: A fusionner avec scrollable-panel
-  let sidebar_content = document.getElementsByClassName('sidebar-content')[0];
+/*  let sidebar_content = document.getElementsByClassName('sidebar-content')[0];
   if (sidebar_content) {
     let from_top = sidebar_content.getBoundingClientRect().top;
     sidebar_content.style.height = window.innerHeight - from_top + 'px';
-  }
+  }*/
+  
 };
 
 exports.updateHeight = _.debounce(setHeight, 300);
