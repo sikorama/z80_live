@@ -19,11 +19,11 @@ Accounts.ui.config({
   passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL'
 })
 
-
 // English by defaut
-T9n.setLanguage('en');
+//T9n.setLanguage('en');
 //AutoForm.debug();
 AutoForm.setDefaultTemplate('plain');
+
 
 /* Valeur par défaut des variables de session */
 Meteor.call('getURL', function(err,res) {Session.setDefault('URL',res);});

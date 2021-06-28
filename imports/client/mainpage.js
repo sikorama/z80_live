@@ -82,6 +82,6 @@ Template.PageTop.events({
     }
     event.currentTarget.className += ' pure-menu-active';
     // A la place de Meteor.logout()
-    if (event.target.id === 'logout') AccountsTemplates.logout();
+    if (event.target.id === 'logout') Meteor.logout();
   }
 });

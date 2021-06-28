@@ -6,9 +6,7 @@ import { init_publications } from './publications.js';
 import { getParam, init_settings } from './settings.js';
 import { init_users } from './user_management.js';
 
-
-
-//  AccountsTemplates.init();
+import '../imports/api/settings-server.js';
 
 // Code a executer au démarrage du serveur
 Meteor.startup(() => {

@@ -12,6 +12,7 @@
       <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 
   <div>
+   
     {{> PageTop}}
     {{#if notifications}}
       <div class="notif" id="oNote">
@@ -84,7 +85,7 @@
         <ul class="pure-menu-children">
             <li class="pure-menu-item">
               <a href="/" id="logout" class="pure-menu-link">
-                <i class="fa fa-sign-out" aria-hidden="true"></i>Disconnect
+                <i class="fa fa-sign-out" aria-hidden="true"></i>Logout
               </a>
             </li>
             <li class="pure-menu-item">
@@ -103,7 +104,7 @@
       {{else}}
       <li class="pure-menu-item pure-menu-has-children">
         {{>loginButtons align="right"}}
-      </li>
+       </li>
       {{/if}}
     </ul>
   </nav>
