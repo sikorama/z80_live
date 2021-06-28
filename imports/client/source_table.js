@@ -65,7 +65,6 @@ Template.SourceTable.helpers({
 
     return SourceAsm.find(selector, { sort: getRouteTableSortObj({ timestamp: -1 }), fields: { code: 0 } });
   },
-
 });
 
 

@@ -287,7 +287,7 @@ function assemble(sourceId) {
     }
 
     if (!code) {
-      console.error("Assemble: no code!");
+      //console.error("Assemble: no code!");
       return;
     }
 

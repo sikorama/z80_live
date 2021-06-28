@@ -228,15 +228,11 @@ function getRouteSortVar() {
   return p;
 };
 
-
-
-
 // Get internal sort object (may contain compound field names)
 function getRouteTableSort(def) {
   let p = getRouteSortVar();
   let v = Session.get(p);
   if (v === undefined) return def;
-  console.error(v);
   return v;
 };
 
@@ -245,6 +241,11 @@ function setRouteTableSort(sv) {
   Session.set(p, sv);
 };
 
+/**
+ * Update Sorting for the table associated with the route
+ * 
+ * @param {String} id : Field name for sorting
+ */
 export function updateRouteTableSort(id) {
   // Fonction a mettre en global
   if (id) {
@@ -263,16 +264,17 @@ export function updateRouteTableSort(id) {
   }
 }
 
-// Get Sort object, to use for sort function
+/**
+ * Get Sort object, to use for sort function
+ * @param {*} def : Default Sort object
+ */
 export function getRouteTableSortObj(def) {
   let o = getRouteTableSort(def);
-  let k = Object.keys(o)[0];
   let so= {};
+  let k = Object.keys(o)[0];
   k.split(",").forEach((f)=> {so[f] = o[k]});
-  //console.error(so);
   return so;  
 }
-
 
 // Recursive search of id property in htlm elements, in DOM
 export function getParentId(el) {
