@@ -83,7 +83,6 @@ FlowRouter.route('/edit/:sourceId', {
 
 FlowRouter.route('/edit', {
   action: function(params, queryParams) {
-    console.error('/edit/');
     BlazeLayout.render('Page', {
       main: 'SourceEdit'
     });

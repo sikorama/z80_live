@@ -75,8 +75,6 @@ Template.AdminSettings.helpers({
 Template.AdminSources.events({
 "click button": function(event) {
     Meteor.call('getAllSources', function(err,res) {
-      //console.error('getAllSources', err,res);
-
       let blob  = new Blob([res]);
       let a = document.createElement('a');
       a.href = window.URL.createObjectURL(blob, {type: "application/zip"});
@@ -162,7 +160,6 @@ Template.AdminUsers.helpers({
     return 'ok';
   },
   doc: function () {
-    console.error(Session.get('SelectedUser'));
     if (Session.equals('SelectedUser'), undefined)
       return {}
     return Meteor.users.findOne(Session.get('SelectedUser'));
@@ -171,7 +168,6 @@ Template.AdminUsers.helpers({
 
 Template.AdminUsers.events({
   "submit form": function (event) {
-    console.error('submit form', event.target);
     event.preventDefault();
     return false;
   },
@@ -193,11 +189,9 @@ Template.AdminGroups.onRendered(function () {
 
 Template.AdminGroups.helpers({
   groups: function () {
-    //SourceGroups.find().forEach(function(item) {console.error(item)});
     return SourceGroups.find();
   },
   numSource: function (g) {
-//    SourceAsm.find().forEach(function(item) {console.error(item)});
     return (SourceAsm.find({ group: g }).count());
   },
   numUsers: function (g) {
@@ -213,12 +207,10 @@ Template.AdminGroups.events({
   },
   'submit': function (event) {
     Session.set('dialog_template', undefined);
-    //console.log('submit group');
     return false;
   },
   'click .newitem': function (event) {
     // Popup avec formulaire pour le groupe
-    console.log('Ajouter un groupe');
     Session.set('dialog_param', {
       title: 'Groupe',
       schema: 'Groups',

@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session'
-import { isMobile, addEvent, updateHeight} from './globals.js';
+import { addEvent, updateHeight } from './globals.js';
 
 import './mainpage.html';
 import './modal.js';
@@ -9,12 +9,12 @@ import { Tracker } from 'meteor/tracker';
 Template.Page.onRendered(function () {
   // L'evenement resize force le calcul des elements en hateur
   addEvent(window, 'resize', updateHeight);
- // this.subscribe('sourceAsm');
+  // this.subscribe('sourceAsm');
 
 });
 
 Template.LoginForm.onRendered(function () {
-  Tracker.autorun(function() {
+  Tracker.autorun(function () {
     if (Meteor.userId()) {
       FlowRouter.go('/browse');
     }
@@ -44,14 +44,10 @@ Template.Page.helpers({
   dialog_active: function () {
     return (!Session.equals('dialog_template', undefined));
   },
-
 })
-
 
 Template.Page.events({
   'click .notif': function (event) {
-    //console.error('Click sur notification', event.target.id,event.target.className);
-    // On peut effacer les notifs au passage
     Session.set('notifications', []);
     if (event.target.id) {
       dest = '/edit/' + event.target.id;
@@ -65,7 +61,6 @@ Template.Page.events({
     return false;
   },
 });
-
 
 // -- PageTop
 Template.PageTop.helpers({
@@ -87,6 +82,6 @@ Template.PageTop.events({
     }
     event.currentTarget.className += ' pure-menu-active';
     // A la place de Meteor.logout()
-    if (event.target.id === 'logout') AccountsTemplates.logout();	
+    if (event.target.id === 'logout') AccountsTemplates.logout();
   }
 });

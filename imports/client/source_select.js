@@ -106,7 +106,6 @@ Template.SourceSelect.events({
                         curf.splice(ie, 1);
                 }
             }
-            //      console.error(event.target,t,curf);
             Session.set('sourceSearchFilters', curf);
             event.preventDefault();
         }

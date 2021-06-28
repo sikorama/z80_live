@@ -71,16 +71,13 @@ Template.SourceTable.helpers({
 
 Template.SourceTableItem.helpers({
   username(id) {
-//    console.error(id, Meteor.users.findOne(id));
     return Meteor.users.findOne(id).username; 
   },
-
 })
 
 Template.SourceTableItem.events({
   "click td": function (event) {
     const sid = getParentId(event.currentTarget);
-  //  console.error(sid);
     if (sid)
       FlowRouter.go('/edit/' + sid);
   }

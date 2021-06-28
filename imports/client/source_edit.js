@@ -6,7 +6,7 @@ import { Template } from 'meteor/templating';
 import { checkUserRole } from '../api/roles.js';
 import { SourceAsm, SourceBuilds } from '../api/sourceAsm.js';
 import './source_edit.html';
-import { dev_log, getParentId } from './globals.js';
+import { dev_log, getParentId, updateHeight } from './globals.js';
 
 let curByteCode = "";
 
@@ -38,6 +38,10 @@ Template.ClearSource.onRendered(function () {
 });
 
 
+Template.SourceEdit.onRendered(function () {
+  updateHeight();
+});
+
 Template.SourceEdit.onCreated(function () {
   // TODO: Reactive vars?
   Session.set('displayEmu', false);
@@ -59,11 +63,8 @@ Template.SourceEdit.onCreated(function () {
       this.subscribe('sourceAsm', sid, function () {
         let res = SourceAsm.findOne(sid);
         if (res) {
-          console.info('source changed, storing build options', res.buildOptions);
-
           Session.set('buildSettings', res.buildOptions);
           Session.set("srcFromDB", true);
-//          assemble(sid);
         }
         else {
           const label = "You're not allowed to access this source code. Either it doesn't exist,or its owner has set it as private. Ask its owner to share it in another group (public for example)"
@@ -78,9 +79,7 @@ Template.SourceEdit.onCreated(function () {
   // debounce?
   this.autorun(() => {
     let sid = FlowRouter.getParam('sourceId');
-      console.error('autorun =>', sid);
-    //if (sid)
-      assemble(sid);
+    assemble(sid);
   });
 
 
@@ -129,35 +128,30 @@ Template.SourceEdit.helpers({
   },
   turl() {
     try {
-      let bset = Session.get('buildSettings');      
-      console.error('BSET',bset);
-      console.error('ZX',Session.get('tinyZXURL'));
-      console.error('CPC',Session.get('tinyCPCURL'));
-      
-      if (bset.buildmode==='z80') {
+      let bset = Session.get('buildSettings');
+      if (bset.buildmode === 'z80') {
         return Session.get('tinyZXURL');
       }
-      
+
       else {
         // cpc
         return Session.get('tinyCPCURL');
       }
-      
     }
-    catch(e) {
+    catch (e) {
       console.error(e);
       return 'http://'
-    }    
+    }
   },
 
   emuoptions() {
     let bset = Session.get('buildSettings');
-    if (bset.buildmode==='z80') {
+    if (bset.buildmode === 'z80') {
       return "joystick=kempston&type=zx48k"
     }
     else {
       // cpc
-        return '&joystick=true'
+      return '&joystick=true'
     }
   },
   // Recupere l'url du fichier, en 2 versions
@@ -167,13 +161,11 @@ Template.SourceEdit.helpers({
     let bset = Session.get('buildSettings');
     let res = undefined;
 
-//    console.error('emufile...', cid, url, bset);
     let sb = SourceBuilds.findOne({
       buildId: cid
     });
 
     if (cid) {
-      //console.error('emufile... sb=', sb);
       if (sb) {
         res = url + '/' + sb.output;
       }
@@ -183,12 +175,11 @@ Template.SourceEdit.helpers({
 
       // On utilise le source pour retrouver la session de build
       // Ce qui n'est pas bien
-      console.warn('Using source name for finding build');
+
       if (FlowRouter.getParam('sourceId')) {
         //if (Session.equals('displayPrebuilt', true))
         {
           const src = SourceAsm.findOne(FlowRouter.getParam('sourceId'));
-          //console.error('source = ', src, FlowRouter.getParam('sourceId')());
           if (src) {
             const sb = SourceBuilds.findOne({
               src: src.name + '.asm'
@@ -210,8 +201,7 @@ Template.SourceEdit.helpers({
     if (bset)
       if (bset.command)
         cmd += '&input=' + bset.command + '%0A';
-     //cmd = encodeURIComponent(cmd)
-     console.error(cmd, encodeURIComponent(cmd));
+ 
     return ({ file: res, cmd: cmd })
   },
 
@@ -265,7 +255,6 @@ let getSource = function () {
  * @param {String} sourceId : index of source code
  */
 function assemble(sourceId) {
-  //console.error('Assemble', sourceId);
   try {
     let code;
 
@@ -274,16 +263,15 @@ function assemble(sourceId) {
     let settings = Session.get('buildSettings');
 
     if (!settings)
-    settings = {
-    };
+      settings = {
+      };
 
-  if (sourceId)
-    settings.sourceId = sourceId;
+    if (sourceId)
+      settings.sourceId = sourceId;
 
 
     if (sourceId) {
-      const src = SourceAsm.findOne(sourceId, {fields: {score:0, rank: 0, numvotes:0}});
-      console.info("Get source from DB!");
+      const src = SourceAsm.findOne(sourceId, { fields: { score: 0, rank: 0, numvotes: 0 } });
       code = getSource();
 
       if (src)
@@ -295,7 +283,6 @@ function assemble(sourceId) {
     }
     else {
       // Get source from editor
-      console.info("Get source from editor!");
       code = getSource();
     }
 
@@ -310,12 +297,7 @@ function assemble(sourceId) {
     Session.set('displayEmu', false);
     Session.set('curBuildSession', false);
 
-
-    console.error('Assemble - Build settings = ', settings);
-
-
     // Assemblage distant (serveur meteor=>serveur de compilation)
-
     // OPTIM:
     // Voir si il ne faut pas passer par une db pour stocker le source plutot que le passer en parametre
     // => La c'est le client qui envoit au serveur qui envoit au compilateur...
@@ -323,7 +305,6 @@ function assemble(sourceId) {
 
     Meteor.call('assemble', code, settings, function (err, data) {
       if (err) console.error('Assemble error: ', err);
-      if (data) console.error('Assemble data: ', data);
 
       Session.set('curBuildSession', data);
       Session.set('displayEmu', true);
@@ -354,7 +335,7 @@ Template.SourceEdit.events({
     // Get button id, to know wht to do
     let tid = event.target.id;
     let doc = {};
-    const sid = FlowRouter.getParam('sourceId'); 
+    const sid = FlowRouter.getParam('sourceId');
 
     // Comment mettre a jour le contenu de l'éditeur?
     if (tid === 'newbtn') {
@@ -385,14 +366,12 @@ Template.SourceEdit.events({
       doc.buildOptions = Session.get('buildSettings');
 
       Meteor.call('insertSource', doc, function (err, id) {
-        console.error('insert Source: err=', err, 'data=', id);
         if (id) {
           Session.set('dialog_param', {
             id: id,
           });
           Session.set('dialog_template', 'PopUpFileSettings');
           FlowRouter.go('/edit/' + id);
-
         }
       });
     }
@@ -416,7 +395,7 @@ Template.SourceEdit.events({
   // When source code is change, 'save' button is enabled
   // And can be reassembled
   "input .CodeMirror ": function () {
-    Session.set('srcChanged', true); 
+    Session.set('srcChanged', true);
   },
   "input .CodeMirror": _.debounce(function (event) {
     // Auto assemblage

@@ -5,9 +5,13 @@ import { SourceAsm } from '../api/sourceAsm.js';
 import { Schemas } from './schemas.js';
 
 export function dev_log(s) {
-  if (Meteor.isDevelopment) console.error("dev");
+  if (Meteor.isDevelopment) {
+    console.info(s);
+    return
+  }
+
   if (checkUserRole('admin'))
-    console.error(s);
+    console.info(s);
 }
 
 Template.registerHelper(
@@ -74,7 +78,6 @@ Template.registerHelper('selectedSource', function () {
 // l'un des roles soit assigné a l'utilisateur pour renvoyer vrai
 // Une exception: si on est superadmin, ca renvoie oui
 Template.registerHelper('isUserRole', function (roles) {
-  //console.error(roles, Meteor.userId(), checkUserRole(roles));
   return checkUserRole(roles);
 });
 
@@ -145,7 +148,7 @@ export function addEvent(object, type, callback, disable) {
     } else if (object.attachEvent) {
       meth = 'attachEvent';
       if (disable === true)
-        console.error("remove attachEvent non implémenté");
+        console.error("Remove attachEvent not implemented");
       else
         object.attachEvent("on" + type, callback);
     } else {
@@ -162,22 +165,17 @@ export function addEvent(object, type, callback, disable) {
     console.warn("addEvent - non standard method", meth, object, type);
 };
 
-
-// Fonctopn generique pour ajuster la hauteur d'un element,
-// en tenant eventuellement compte de sous elements (placés en bas)
 function setElementHeight(elclass, elbotclass, botheight) {
   let delta = 0;
   if (elbotclass) {
     // On prend le premier sous element
     sc = document.getElementsByClassName(elbotclass)[0];
-    //    console.error('bottom: ', elbotclass, sc);
     if (sc) {
-      delta = botheight; //sc.height;
+      delta = botheight;
     }
   }
 
   let scrollable = document.getElementsByClassName(elclass);
-  //  console.error('setElementHeight', scrollable, delta);
   if (scrollable.length > 0) {
     for (let i = 0; i < scrollable.length; i++) {
       let el = scrollable[i];
@@ -192,27 +190,27 @@ function setElementHeight(elclass, elbotclass, botheight) {
 // Permet de gerer proprement les scroll bars.
 function setHeight() {
   // Liste de recherche, avec le resultat en bas
-  //console.info("Set height");
   setElementHeight('scrollable-panel');
   setElementHeight('scrollable-form', 'scrollable-form-status', 32);
   setElementHeight('scrollable-search', 'scrollable-search-status', 24);
 
-  // TODO: A fusionner avec scrollable-panel
-/*  let sidebar_content = document.getElementsByClassName('sidebar-content')[0];
-  if (sidebar_content) {
-    let from_top = sidebar_content.getBoundingClientRect().top;
-    sidebar_content.style.height = window.innerHeight - from_top + 'px';
-  }*/
-  
+  // Code Mirror Editor
+  let textArea = document.getElementById('source');
+  if (textArea) {
+    let cm = CodeMirrors['source'];
+    let from_top = textArea.getBoundingClientRect().top;
+    let newh = '' + (window.innerHeight - from_top - 200) + 'px';
+    dev_log('From top='+from_top+' Inner Height='+ window.innerHeight + '=>' + newh);
+    cm.setSize(null, newh);
+  }
+
 };
 
 exports.updateHeight = _.debounce(setHeight, 300);
 
-// Récupere la liste des groupes de l'utilisateur actuel
 Template.registerHelper(
   'userGroupList',
   function () {
-    //      console.error('userGroupList', Meteor.userId());
     if (Meteor.user().groups === undefined)
       return undefined;
     return (Meteor.user().groups.map(function (item) {
@@ -224,35 +222,24 @@ Template.registerHelper(
   }
 );
 
-
-
-
-// Pour le tri des tables, quelques fonctions génériques
-// Pour manipuler des variables de session
-
-// Fonction pour recuperer la variable de session liée a la route actuelle
-// pour trier la table en cours (on suppose qu'il n'y en a qu'une)
-let getRouteSortVar = function () {
+function getRouteSortVar() {
   let p = 'Sort' + FlowRouter.current().path;
   return p;
 };
-//exports.getRouteSortVar = getRouteSortVar;
 
-let getRouteTableSort = function (def) {
+export function getRouteTableSort(def) {
   let p = getRouteSortVar();
   let v = Session.get(p);
   if (v === undefined) return def;
   return v;
 };
-exports.getRouteTableSort = getRouteTableSort;
 
-let setRouteTableSort = function (sv) {
+function setRouteTableSort(sv) {
   let p = getRouteSortVar();
   Session.set(p, sv);
 };
-//exports.setRouteTableSort = setRouteTableSort;
 
-exports.updateRouteTableSort = function (id) {
+export function updateRouteTableSort(id) {
   // Fonction a mettre en global
   if (id) {
     let sv = getRouteTableSort();
@@ -270,8 +257,6 @@ exports.updateRouteTableSort = function (id) {
   }
 }
 
-
-
 // Recherche récursive de l'id, pour eviter de mettre plusieurs
 export function getParentId(el) {
   while ((el.id === undefined || el.id === "") && el.parentElement != undefined) {
@@ -279,7 +264,3 @@ export function getParentId(el) {
   }
   return el.id;
 }
-
-
-
-

@@ -60,20 +60,14 @@ Template.PopUpFileSettings.helpers({
 
 Template.PopUpFileSettings.events({
   "click button,submit": function (event) {
-    console.error('SUBMIT');
     // Fermeture popup
     Session.set('dialog_template',undefined );  
     // Either we get form's data
     // And store to buildSetting
-  
     let doc = AutoForm.getFormValues('filesettings');
-    console.error(doc);
     if (doc.insertDoc.buildOptions) {
       Session.set('buildSettings', doc.insertDoc.buildOptions);
-      console.error(doc.insertDoc.buildOptions);
     }
-
-    //return false;
   }
 });
 
