@@ -1,7 +1,7 @@
 import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 import { SourceAsm } from '../api/sourceAsm.js';
-import { getRouteTableSort, updateHeight, updateRouteTableSort } from './globals.js';
+import { getRouteTableSort, updateHeight, updateRouteTableSort, getRouteTableSortObj } from './globals.js';
 import './source_table.html';
 import './searchArea.js';
 import './source_select.js';
@@ -63,7 +63,7 @@ Template.SourceTable.helpers({
       selector["buildOptions.buildmode"] = { '$in': typfilter };
     }
 
-    return SourceAsm.find(selector, { sort: getRouteTableSort({ timestamp: -1 }), fields: { code: 0 } });
+    return SourceAsm.find(selector, { sort: getRouteTableSortObj({ timestamp: -1 }), fields: { code: 0 } });
   },
 
 });

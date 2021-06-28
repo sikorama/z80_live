@@ -222,15 +222,21 @@ Template.registerHelper(
   }
 );
 
+// get Name of session var, containing the sort object
 function getRouteSortVar() {
   let p = 'Sort' + FlowRouter.current().path;
   return p;
 };
 
-export function getRouteTableSort(def) {
+
+
+
+// Get internal sort object (may contain compound field names)
+function getRouteTableSort(def) {
   let p = getRouteSortVar();
   let v = Session.get(p);
   if (v === undefined) return def;
+  console.error(v);
   return v;
 };
 
@@ -244,20 +250,31 @@ export function updateRouteTableSort(id) {
   if (id) {
     let sv = getRouteTableSort();
     if ((sv != undefined) && sv.hasOwnProperty(id)) {
-      // Inversion du tri
+      // Invert sort order
       sv[id] = -sv[id];
     }
     else {
-      // Active le tri
+      // Enable sorting
       sv = {};
-      // Le sens par defaut pourrait dépende du type (date, chaine, number...)
+      // Default order
       sv[id] = -1;
     }
     setRouteTableSort(sv);
   }
 }
 
-// Recherche récursive de l'id, pour eviter de mettre plusieurs
+// Get Sort object, to use for sort function
+export function getRouteTableSortObj(def) {
+  let o = getRouteTableSort(def);
+  let k = Object.keys(o)[0];
+  let so= {};
+  k.split(",").forEach((f)=> {so[f] = o[k]});
+  //console.error(so);
+  return so;  
+}
+
+
+// Recursive search of id property in htlm elements, in DOM
 export function getParentId(el) {
   while ((el.id === undefined || el.id === "") && el.parentElement != undefined) {
     el = el.parentElement;
