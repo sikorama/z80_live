@@ -277,7 +277,7 @@ function assemble(sourceId) {
       if (src)
         code = src.code;
       else {
-        console.error('No source code available');
+        //console.error('No source code available');
         return;
       }
     }

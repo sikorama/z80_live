@@ -70,7 +70,11 @@ Template.SourceTable.helpers({
 
 Template.SourceTableItem.helpers({
   username(id) {
-    return Meteor.users.findOne(id).username; 
+    if (id) {
+      let u =Meteor.users.findOne(id);
+      if (u) return u.username; 
+    }
+    return 'Guest'
   },
 })
 

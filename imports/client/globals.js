@@ -6,12 +6,12 @@ import { Schemas } from './schemas.js';
 
 export function dev_log(s) {
   if (Meteor.isDevelopment) {
-    console.info(s);
+    console.info('[dev]', s);
     return
   }
 
   if (checkUserRole('admin'))
-    console.info(s);
+    console.info('[dev]',s);
 }
 
 Template.registerHelper(
