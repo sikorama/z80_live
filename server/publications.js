@@ -17,23 +17,6 @@ import { SourceAsm, SourceBuilds, SourceGroups, UserRatings } from '../imports/a
 import { sendNotifRocket } from './notifications.js';
 import { getUserGroups, isAdmin } from './user_management.js';
 
-/*
-// Verification que l'on est autorisé a recuperer
-// des elements sur un source donnée
-// renvoie undefined ou la description du source
-// => cette fonction pourrait aller dans user_management.js
-function checkSourceGroup(mhid, userId) {
-  const groups = getUserGroups(userId);
-  console.error('check user group', userId, groups)
-  res = SourceAsm.findOne({
-    'id': mhid,
-    'group': {
-      $in: groups
-    }
-  });
-  return res;
-}
-*/
 
 // All Publications Declarations
 export function init_publications() {

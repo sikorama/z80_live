@@ -20,7 +20,7 @@ export let Schemas = {};
 Schemas.ForcePassword = new SimpleSchema({
   password: {
     type: String,
-    label: 'Nouveau mot de passe',
+    label: 'New password',
     optional: false
   }
 });
@@ -75,18 +75,18 @@ Schemas.BuildSettings = new SimpleSchema({
 Schemas.Users = new SimpleSchema({
   username: {
     type: String,
-    label: 'Nom',
+    label: 'Name',
     optional: false
   },
   email: {
     type: String,
-    label: 'Mail',
+    label: 'Email',
     optional: false,
     regEx: SimpleSchema.RegEx.Email
   },
   password: {
     type: String,
-    label: 'Mot de passe',
+    label: 'Password',
     optional: false
   },
   roles: {
@@ -103,7 +103,7 @@ Schemas.Users = new SimpleSchema({
     allowedValues: [ "admin","editor"],
   },
   groups: {
-    label: 'Groupes',
+    label: 'Groups',
     type: Array,
     optional: true,
     defaultValue: 'public',
@@ -126,7 +126,7 @@ Schemas.Users = new SimpleSchema({
 Schemas.Groups = new SimpleSchema({
   name: {
     type: String,
-    label: 'Nom',
+    label: 'Name',
   },
   desc: {
     type: String,

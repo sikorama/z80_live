@@ -40,18 +40,17 @@
 <template name="AdminSources">
   <h1 class="home-title">Sources</h1>
   <button id="dall"> Download all sources</button>
-
 </template>
 
 
 <template name="AdminSession">
-  <h1 class="home-title">Session Utilisateur Actuel</h1>
+  <h1 class="home-title">User Session</h1>
   <div class="scrollable-search">
     <table class="pure-table">
       <thead>
         <tr>
-          <th>Cle</th>
-          <th>Valeur</th>
+          <th>Key</th>
+          <th>Value</th>
         </tr>
       </thead>
       <tbody>
@@ -67,7 +66,7 @@
 </template>
 
 <template name="AdminSettings">
-  <h1 class="home-title">Configuration Serveur</h1>
+  <h1 class="home-title">Server Settings</h1>
   <button class="resetSettings pure-button pure-button-primary"> Reset </button>
   <div class="scrollable-search">
     <table class="pure-table">
@@ -111,7 +110,7 @@
           <th id="date">Source</th>
           <th id="date">Type</th>
           <th id="date">Status</th>
-          <th id="user">Utilisateur</th>
+          <th id="user">User</th>
           <th id="user">Result</th>
           <th id="user">Data</th>
         </tr>
@@ -173,7 +172,7 @@
       <thead>
         <tr>
           <th id="name">
-            Nom du groupe
+            Group name
           </th>
           <th id="infos">
             Description
@@ -182,7 +181,7 @@
             #Sources
           </th>
           <th id="occusers">
-            #Utilisateur
+            #Users
           </th>
         </tr>
       </thead>
@@ -211,27 +210,28 @@
 
 <template name="AdminUsers">
   <div class="pure-g">
-    <div class="pure-u-5-8">
-      <div class="online">
-        <div class="home-title">Utilisateurs
-          {{#unless form_insertMode}}
-          <div class="align-right">
-            <button class="pure-button pure-button-primary" id="newuser">+</button>
-          </div>
-          {{/unless}}
-        </div>
+    <div class="pure-u-1">
+      <div class="online">     
+        <h2 class="home-title">Users
+          <span class="align-right">
+            {{#unless form_insertMode}}
+            {{/unless}}
+          </span>
+        </h2>
       </div>
+
     </div>
   </div>
+
   <div class="pure-g">
     <div class="pure-u-5-8 scrollable-search">
       <table class="pure-table">
         <thead>
           <tr>
-            <th id="name">Utilisateur</th>
+            <th id="name">Username</th>
             <th id="email">Email</th>
             <th id="roles">Role(s)</th>
-            <th id="groupes">Groupe(s)</th>
+            <th id="groupes">Group(s)</th>
           </tr>
         </thead>
         <tbody>
@@ -247,12 +247,14 @@
           {{/each}}
         </tbody>
       </table>
+      <button class="pure-button pure-button-primary" id="newuser">+ Add User</button>
+
     </div>
 
     <div class="pure-u-3-8 scrollable-form">
       <section class="fiche-forme">
         {{#unless doc}}
-        <h1 class="home-title">Ajouter un Utilisateur</h1>
+        <h1 class="home-title">New User</h1>
         <div>
           <div class="addForm1">
             {{#autoForm id="addUserForm" formPreserve=true doc=doc schema=schemas.Users type="method" meteormethod="insertUser" buttonContent="Ajouter"}}
@@ -260,13 +262,13 @@
             {{> afQuickField name="groups" options=groupList}}
             {{> afQuickFields omitFields='roles,groups'}}
             <div>
-              <button type="submit" class="btn btn-primary">Valider l'ajout</button>
+              <button type="submit" class="pure-button pure-button-primary">Create Account</button>
                 </div>
             {{/autoForm}}
           </div>
         </div>
         {{else}}
-        <h1 class="home-title">Modification {{doc.username}}</h1>
+        <h1 class="home-title">Edit {{doc.username}}</h1>
         <div class="addForm1">
           {{#autoForm id="updateUserForm" formPreserve=true doc=doc schema=schemas.Users type="method-update" meteormethod="updateUser" buttonContent="Ajouter"}}
          <!--
@@ -275,21 +277,22 @@
          -->
          {{> afQuickField name="roles" }}
           {{> afQuickField name="groups" options=groupList}}
-          <button type="submit" class="btn btn-primary">Valider</button>
+          <button type="submit" class="pure-button pure-button-primary">Valider</button>
           {{/autoForm}}
         </div>
 
-        <h1 class="home-title">Changer le mot de passe </h1>
-        <p>Pour l'utilisateur: {{doc.username}}</p>
+        <h2>Reset Password</h2>
         <div>
-          {{#autoForm id="changePasswordForm" formPreserve=true doc=doc schema=schemas.Users type="method" meteormethod="forcePassword" buttonContent="Ajouter"}}
+          {{#autoForm id="changePasswordForm" formPreserve=true doc=doc schema=schemas.Users type="method" meteormethod="forcePassword" }}
             {{> afQuickField name="password" }}
             <div>
-              <button type="submit" class="btn btn-primary">Valider</button>
+              <button type="submit" class="pure-button pure-button-primary">Force Password</button>
             </div>
             {{/autoForm}}
-
         </div>
+
+        <h2>Delete Account</h2>
+        <button id="removeUser" class="pure-button pure-button-primary">Remove Account</button>
         {{/unless}}
 
       </section>

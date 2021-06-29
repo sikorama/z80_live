@@ -43,9 +43,9 @@ export function getUserGroups(userId) {
   const user = Meteor.users.findOne({
     '_id': userId
   });
-  if (!user) return [];
+  if (!user) return ['public'];
   const userg = user.groups;
-  if (!userg) return [];
+  if (!userg) return ['public'];
   return userg;
 }
 
@@ -134,6 +134,13 @@ function createDefaultAccounts() {
 
 export function init_users() {
   Meteor.methods({
+    removeUser: function(userid) {
+      if (isAdmin(this.userId)) {
+        // All sources of this user wich are not public
+        // Should be moved to a specific group (admin or no-user)
+        Meteor.users.remove(userid)
+      }
+    },
     insertUser: function (doc) {
       //console.error('insert user', doc);
       if (isAdmin(this.userId)) {
@@ -147,10 +154,7 @@ export function init_users() {
         if (user != undefined) {
           // Cas particulier du superadmin: on ne peut pas lui retirer!
           if (hasRole(doc._id, ['superadmin'])) {
-            // 2 cas: soit on a un unser.role, auquel cas on le remplace par un set.role
-            // Soit un set role et dans ce cas il faut ajouter le superadmin dedans
-            // FIXME: il doit y avoir un moyen plus elegant de faire ca, on a bcp de tests
-            // de undefined et des delete...
+            // FIXME: could be easier...
             if ((doc.modifier.$unset != undefined) && (doc.modifier.$unset.roles != undefined)) {
               delete doc.modifier.$unset.roles;
               if (Object.keys(doc.modifier.$unset).length === 0)

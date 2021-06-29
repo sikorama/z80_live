@@ -206,7 +206,7 @@ function setHeight() {
 
 };
 
-exports.updateHeight = _.debounce(setHeight, 300);
+exports.updateHeight = _.debounce(setHeight, 500);
 
 Template.registerHelper(
   'userGroupList',

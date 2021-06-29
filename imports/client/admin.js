@@ -167,6 +167,7 @@ Template.AdminUsers.helpers({
 });
 
 Template.AdminUsers.events({
+
   "submit form": function (event) {
     event.preventDefault();
     return false;
@@ -174,6 +175,14 @@ Template.AdminUsers.events({
   "click button": function (event) {
     if (event.target.id == 'newuser') {
       Session.set('SelectedUser',undefined);
+    }
+    if (event.target.id == 'removeUser') {
+      let uid=Session.get('SelectedUser');
+      if (confirm('Are you sure you want to delete this account?'))
+      {
+        Meteor.call('removeUser', uid);
+      }
+
     }
   },
   "click tr": function (event) {

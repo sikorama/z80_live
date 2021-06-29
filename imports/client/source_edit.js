@@ -53,7 +53,7 @@ Template.SourceEdit.onCreated(function () {
 
     let sid = FlowRouter.getParam('sourceId');
 
-    // TODO: Ne souscrire qu'aux builds de sa session/du source?
+    // TODO: Only Subscribe to current builds
     this.subscribe('sourceBuilds');
 
     if (sid) {
@@ -143,7 +143,6 @@ Template.SourceEdit.helpers({
       return 'http://'
     }
   },
-
   emuoptions() {
     let bset = Session.get('buildSettings');
     if (bset.buildmode === 'z80') {
@@ -234,11 +233,6 @@ Template.SourceEdit.helpers({
 
     return res;
   },
-  /*  filterResult: function(txt,src) {
-      regex = new RegExp(src, 'g');
-      let res = txt.replace(regex,"");
-      return res;
-    }*/
 });
 
 // Recupere le code au niveau de l'éditeur
@@ -268,7 +262,6 @@ function assemble(sourceId) {
 
     if (sourceId)
       settings.sourceId = sourceId;
-
 
     if (sourceId) {
       const src = SourceAsm.findOne(sourceId, { fields: { score: 0, rank: 0, numvotes: 0 } });
