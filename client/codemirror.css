@@ -9,7 +9,7 @@
 
 .CodeMirror * {
   word-wrap: break-word;
-  white-space: normal;
-  word-break: break-word;
+  white-space: break-spaces;
+  word-break: break-all;
   font-size: 14px;
 }
