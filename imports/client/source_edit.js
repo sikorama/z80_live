@@ -6,7 +6,7 @@ import { Template } from 'meteor/templating';
 import { checkUserRole } from '../api/roles.js';
 import { SourceAsm, SourceBuilds } from '../api/sourceAsm.js';
 import './source_edit.html';
-import { dev_log, getParentId, updateHeight } from './globals.js';
+import { dev_log, getParentId, updateHeight, setHeight } from './globals.js';
 
 let curByteCode = "";
 
@@ -39,7 +39,20 @@ Template.ClearSource.onRendered(function () {
 
 
 Template.SourceEdit.onRendered(function () {
-  updateHeight();
+  let handle = Meteor.setInterval(() => {
+    console.error('timet', handle);
+    if (setHeight()) {
+      Meteor.clearTimeout(handle);
+    }
+  },500);
+
+/*  const f = function() {
+    if (!setHeight()) {
+      Meteor.timeout(f,500)
+    };
+  }
+  f();  */
+
 });
 
 Template.SourceEdit.onCreated(function () {

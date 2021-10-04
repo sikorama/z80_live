@@ -188,8 +188,7 @@ function setElementHeight(elclass, elbotclass, botheight) {
 
 // Applique le calcul de la hauteur pour un ensemble d'elements repérés par leur classe
 // Permet de gerer proprement les scroll bars.
-function setHeight() {
-  // Liste de recherche, avec le resultat en bas
+export function setHeight() {
   setElementHeight('scrollable-panel');
   setElementHeight('scrollable-form', 'scrollable-form-status', 32);
   setElementHeight('scrollable-search', 'scrollable-search-status', 24);
@@ -202,7 +201,11 @@ function setHeight() {
     let newh = '' + (window.innerHeight - from_top - 200) + 'px';
     dev_log('From top='+from_top+' Inner Height='+ window.innerHeight + '=>' + newh);
     cm.setSize(null, newh);
+    return true;
   }
+
+  // Couldn't get textArea, return false
+  return false;
 
 };
 
