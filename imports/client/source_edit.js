@@ -56,10 +56,11 @@ Template.SourceEdit.onRendered(function () {
 });
 
 Template.SourceEdit.onCreated(function () {
-  // TODO: Reactive vars?
+  // TODO: User reactive vars instead?
   Session.set('displayEmu', false);
   Session.set("srcFromDB", false);
   Session.set("srcChanged", false);
+  Session.setDefault('showAsmOutput', false)
 
   // Autorun, so if we fork, we can subscribe to the new source
   this.autorun(() => {
@@ -99,13 +100,13 @@ Template.SourceEdit.onCreated(function () {
 });
 
 Template.SourceEdit.helpers({
-  autobuildclass: function () {
+  autobuildclass() {
     if (Session.equals("autobuild", true)) {
       return 'ok-button';
     }
     //    return 'ko';
   },
-  uiclass: function () {
+  uiclass() {
     if (Session.equals("emuui", true)) {
       return 'ok-button';
     }
@@ -136,9 +137,24 @@ Template.SourceEdit.helpers({
       lineNumbers: true,
       lineWrapping: true,
       scrollbarStyle: "simple",
-      mode: "z80A"
+      mode: "z80A",
+      indentUnit: 4,
+      // Replace Tabs by Spaces
+      extraKeys: {
+        Tab: function(cm) {
+          if (cm.doc.somethingSelected()) {
+            return CodeMirror.Pass;
+          }
+          const spacesPerTab = cm.getOption('indentUnit');
+          console.error(spacesPerTab);
+          const spacesToInsert = spacesPerTab - (cm.doc.getCursor("start").ch % spacesPerTab);
+          const spaces = Array(spacesToInsert + 1).join(' ');
+          cm.replaceSelection(spaces,'end','+input');
+        }
+      }
     };
   },
+  // get tiny 8 bit URL (CPC or ZX)
   turl() {
     try {
       let bset = Session.get('buildSettings');
@@ -166,7 +182,7 @@ Template.SourceEdit.helpers({
       return '&joystick=true'
     }
   },
-  // Recupere l'url du fichier, en 2 versions
+  // Get File URL
   emufile() {
     let cid = Session.get('curBuildSession');
     let url = Session.get('fileServerURL');
@@ -217,8 +233,8 @@ Template.SourceEdit.helpers({
     return ({ file: res, cmd: cmd })
   },
 
-  // Récupere le résultat du build
-  buildResult: function () {
+  // Get Build Result
+  buildResult() {
     let cid = Session.get('curBuildSession');
     if (!cid)
       return;
@@ -228,28 +244,24 @@ Template.SourceEdit.helpers({
     });
     return sb
   },
-  status: function (status) {
+  status(status) {
     if (status == 1) return ('warn');
     if (status == 2) return ('ko');
     if (status == 0) return ('ok');
   },
-  //a mettre en globals
-  equal: function (a, b) {
+  equal(a, b) {
     return a === b;
   },
-  collection: function () {
+  collection() {
     return SourceAsm;
   },
-  showResult: function (b) {
-    let res = b.status;
-    // Ou alors si on le demande explicitement
-
-    return res;
+  showResult(b) {
+    return b.status ||  Session.get('showAsmOutput');
   },
 });
 
-// Recupere le code au niveau de l'éditeur
-let getSource = function () {
+// Grab source code from editor 
+function getSource() {
   let d = document.getElementById("source");
   let s = "";
   if (d) s = d.value;
@@ -337,6 +349,9 @@ function updateSource(srcId) {
 }
 
 Template.SourceEdit.events({
+  "click .toggleShowResult": function(event) {
+    Session.set('showAsmOutput', !Session.get('showAsmOutput'));
+  },
   "click .updatebtn": function (event) {
     // Get button id, to know wht to do
     let tid = event.target.id;

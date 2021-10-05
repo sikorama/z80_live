@@ -68,6 +68,15 @@
           <legend>
             <h1 class="home-title">Emulation</h1>
           </legend>
+          <span class="toggleShowResult"> 
+            {{#if showResult 1}} 
+            &#x25bc; 
+            {{else}} 
+            &#x25b6; 
+            {{/if}} Build Logs
+          </span>
+
+
           {{#if sessionVarTrue "displayEmu"}}
           {{#let emuf = emufile}}
           {{#if emuf}}
@@ -87,6 +96,16 @@
 
           {{#let b =buildResult}}
           {{#if b}}
+          
+          <span class="toggleShowResult"> 
+            {{#if showResult b}} 
+            &#x25bc; 
+            {{else}} 
+            &#x25b6; 
+            {{/if}} Build Logs
+          </span>
+
+
           {{#if showResult b}}
           <ul>
             {{#each l in b.stdout}}
@@ -96,6 +115,7 @@
             {{/each}}
           </ul>
           {{/if}}
+          
           {{/if}}
           {{/let}}
           {{/if}}
