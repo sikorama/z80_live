@@ -6,7 +6,7 @@
     <div class="dashboard-cell pure-u-1 pure-u-sm-1 pure-u-md-1-2 pure-u-lg-1-2" height="10px">
       <div class="dashboard-incell dashboard-center-text">
         <section class="">
-          <fieldset >
+          <fieldset>
             <legend>
               <h1 class="home-title">
                 <span title="Build Settings" class="buildsettings">&#x2699;</span>
@@ -29,34 +29,35 @@
                 <!-- &#x2710; &#x2699; &#x22D9; &#x22EF; &#x21b3;-->
               </h1>
             </legend>
-              {{>CodeMirror id="source" name="someName" options=editorOptions code=code.code}}
+            {{>CodeMirror id="source" name="someName" options=editorOptions code=code.code}}
           </fieldset>
         </section>
 
-          {{#if currentUser}}
+        {{#if currentUser}}
 
-            {{#if sessionVarTrue "srcFromDB"}}
-              {{#if canEdit}}
-              <button id="updatebtn"
-                class="updatebtn pure-button {{#if sessionVarTrue "srcChanged"}}pure-button-primary{{/if}}">Save
-              </button>
-              {{/if}}
-              {{#if canEdit}}
-              <button id="delbtn" class="updatebtn pure-button pure-button-primary ko">Delete</button>
-              {{/if}}
-              {{/if}}
-              
-              <button title="Fork this source code, so you can edit and save it!" id="duplicatebtn" class="updatebtn pure-button pure-button-primary">
-                {{#if sessionVarTrue "srcFromDB"}}
-                Fork
-                {{else}}
-                Save as New
-                {{/if}}
-              </button>
+        {{#if sessionVarTrue "srcFromDB"}}
+        {{#if canEdit}}
+        <button id="updatebtn"
+          class="updatebtn pure-button {{#if sessionVarTrue "srcChanged"}}pure-button-primary{{/if}}">Save
+        </button>
+        {{/if}}
+        {{#if canEdit}}
+        <button id="delbtn" class="updatebtn pure-button pure-button-primary ko">Delete</button>
+        {{/if}}
+        {{/if}}
 
-            <button title="New source code" id="newbtn" class="updatebtn pure-button pure-button-primary">New</button>
-
+        <button title="Fork this source code, so you can edit and save it!" id="duplicatebtn"
+          class="updatebtn pure-button pure-button-primary">
+          {{#if sessionVarTrue "srcFromDB"}}
+          Fork
+          {{else}}
+          Save as New
           {{/if}}
+        </button>
+
+        <button title="New source code" id="newbtn" class="updatebtn pure-button pure-button-primary">New</button>
+
+        {{/if}}
 
       </div>
     </div>
@@ -68,19 +69,12 @@
           <legend>
             <h1 class="home-title">Emulation</h1>
           </legend>
-          <span class="toggleShowResult"> 
-            {{#if showResult 1}} 
-            &#x25bc; 
-            {{else}} 
-            &#x25b6; 
-            {{/if}} Build Logs
-          </span>
-
 
           {{#if sessionVarTrue "displayEmu"}}
+
           {{#let emuf = emufile}}
           {{#if emuf}}
-          
+
           <embed width=100%; height=400px; src="{{turl}}?file={{emuf.cmd}}{{options}}">
           <p>
             <a href="{{turl}}?file={{emuf.cmd}}{{options}}" target="TinyCPC">
@@ -94,16 +88,26 @@
           {{/if}}
           {{/let}}
 
-          {{#let b =buildResult}}
-          {{#if b}}
-          
-          <span class="toggleShowResult"> 
-            {{#if showResult b}} 
-            &#x25bc; 
-            {{else}} 
-            &#x25b6; 
-            {{/if}} Build Logs
-          </span>
+          <button id="emul" class="emulbtn pure-button pure-button-primary">RUN</button>
+          <button id="auto" class="pure-button pure-button-primary {{autobuildclass}}">Auto</button>
+          <!--        <button id="ui" class="pure-button pure-button-primary {{uiclass}}">UI</button> -->
+          {{/if}}
+        </fieldset>
+
+        {{#let b =buildResult}}
+        {{#if b}}
+
+        <fieldset>
+
+          <legend>
+            <span class="toggleShowResult">
+              {{#if showResult b}}
+              &#x25bc;
+              {{else}}
+              &#x25b6;
+              {{/if}} Build Logs
+            </span>
+          </legend>
 
 
           {{#if showResult b}}
@@ -115,20 +119,13 @@
             {{/each}}
           </ul>
           {{/if}}
-          
-          {{/if}}
-          {{/let}}
-          {{/if}}
 
+         
         </fieldset>
-
-        <button id="emul" class="emulbtn pure-button pure-button-primary">RUN</button>
-        <button id="auto" class="pure-button pure-button-primary {{autobuildclass}}">Auto</button>
-        <!--        <button id="ui" class="pure-button pure-button-primary {{uiclass}}">UI</button> -->
-
+        {{/if}}
+        {{/let}}
       </div>
     </div>
-
     {{/let}}
     {{/if}}
   </div>
