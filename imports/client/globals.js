@@ -168,12 +168,13 @@ export function addEvent(object, type, callback, disable) {
 function setElementHeight(elclass, elbotclass, botheight) {
   let delta = 0;
   if (elbotclass) {
-    // On prend le premier sous element
     sc = document.getElementsByClassName(elbotclass)[0];
     if (sc) {
       delta = botheight;
     }
   }
+
+  if (botheight) delta = botheight;
 
   let scrollable = document.getElementsByClassName(elclass);
   if (scrollable.length > 0) {
@@ -190,6 +191,7 @@ function setElementHeight(elclass, elbotclass, botheight) {
 // Permet de gerer proprement les scroll bars.
 export function setHeight() {
   setElementHeight('scrollable-panel');
+   setElementHeight('scrollable-build-panel', null, 50);
   setElementHeight('scrollable-form', 'scrollable-form-status', 32);
   setElementHeight('scrollable-search', 'scrollable-search-status', 24);
 

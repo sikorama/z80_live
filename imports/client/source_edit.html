@@ -74,18 +74,17 @@
 
           {{#let emuf = emufile}}
           {{#if emuf}}
-
           <embed width=100%; height=400px; src="{{turl}}?file={{emuf.cmd}}{{options}}">
-          <p>
+          
             <a href="{{turl}}?file={{emuf.cmd}}{{options}}" target="TinyCPC">
-              Fullscreen
+              <button id="tiny" class="pure-button pure-button-primary">Fullscreen</button>
             </a>
-            -
+            
             <a href="{{emuf.file}}">
-              Download
+              <button id="emulf" class="pure-button pure-button-primary">Download</button>
             </a>
-          </p>
-          {{/if}}
+            
+            {{/if}}
           {{/let}}
 
           <button id="emul" class="emulbtn pure-button pure-button-primary">RUN</button>
@@ -98,9 +97,10 @@
         {{#if b}}
 
         <fieldset>
+          <div class="scrollable-build-panel" >
 
           <legend>
-            <span class="toggleShowResult">
+            <span class="toggleShowResult"  >
               {{#if showResult b}}
               &#x25bc;
               {{else}}
@@ -120,6 +120,7 @@
           </ul>
           {{/if}}
 
+          </div>
          
         </fieldset>
         {{/if}}
