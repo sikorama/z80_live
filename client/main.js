@@ -51,4 +51,4 @@ Session.setDefault('sourceSortField','name');
 Session.setDefault("curSelected",'');
 
 //Session.set("srcFromDB", true); //
-Session.setDefault("autobuild",true); // Auto build, enabled by default
+Session.setDefault("autobuild",false); // Auto build, enabled by default

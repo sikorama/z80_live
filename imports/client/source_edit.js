@@ -39,19 +39,20 @@ Template.ClearSource.onRendered(function () {
 
 
 Template.SourceEdit.onRendered(function () {
-  let handle = Meteor.setInterval(() => {
-    console.error('timet', handle);
-    if (setHeight()) {
-      Meteor.clearTimeout(handle);
-    }
-  },500);
+  this.autorun(() => {
 
-/*  const f = function() {
-    if (!setHeight()) {
-      Meteor.timeout(f,500)
-    };
-  }
-  f();  */
+    let sid = FlowRouter.getParam('sourceId');
+
+    let handle = Meteor.setInterval(() => {
+      console.error('timet', handle);
+      if (setHeight()) {
+        Meteor.clearTimeout(handle);
+      }
+    }, 500);
+
+  });
+
+
 
 });
 
@@ -141,7 +142,7 @@ Template.SourceEdit.helpers({
       indentUnit: 4,
       // Replace Tabs by Spaces
       extraKeys: {
-        Tab: function(cm) {
+        Tab: function (cm) {
           if (cm.doc.somethingSelected()) {
             return CodeMirror.Pass;
           }
@@ -149,7 +150,7 @@ Template.SourceEdit.helpers({
           console.error(spacesPerTab);
           const spacesToInsert = spacesPerTab - (cm.doc.getCursor("start").ch % spacesPerTab);
           const spaces = Array(spacesToInsert + 1).join(' ');
-          cm.replaceSelection(spaces,'end','+input');
+          cm.replaceSelection(spaces, 'end', '+input');
         }
       }
     };
@@ -229,7 +230,7 @@ Template.SourceEdit.helpers({
     if (bset)
       if (bset.command)
         cmd += '&input=' + bset.command + '%0A';
- 
+
     return ({ file: res, cmd: cmd })
   },
 
@@ -256,7 +257,7 @@ Template.SourceEdit.helpers({
     return SourceAsm;
   },
   showResult(b) {
-    return b.status ||  Session.get('showAsmOutput');
+    return b.status || Session.get('showAsmOutput');
   },
 });
 
@@ -349,7 +350,7 @@ function updateSource(srcId) {
 }
 
 Template.SourceEdit.events({
-  "click .toggleShowResult": function(event) {
+  "click .toggleShowResult": function (event) {
     Session.set('showAsmOutput', !Session.get('showAsmOutput'));
   },
   "click .updatebtn": function (event) {

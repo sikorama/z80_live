@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.15.4",
-    "archiver": "^4.0.1",
+    "archiver": "^4.0.2",
     "bcrypt": "^5.0.1",
     "codemirror": "^5.61.1",
     "httpreq": "^0.4.24",
