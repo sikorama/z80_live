@@ -5,28 +5,30 @@ import { getParam } from './settings.js';
 const http = require('http');
 
 // Nombre de clients connectés
-let connexions_counter=0;
+let connexions_counter = 0;
 
 export function init_assembler() {
 
     // When a client closes a session, clean all build information
     Meteor.onConnection(function (cnx) {
-        connexions_counter+=1;
-        console.info('Connection',connexions_counter,'from client', cnx.id);
-        
+        connexions_counter += 1;
+        console.info('Connection', connexions_counter, 'from client', cnx.id);
+
         cnx.onClose(function () {
-          try {
-            connexions_counter -=1;
-    
-            console.info('Client Connection closed', cnx.id);
-            // Remove Curve Data
-            SourceBuilds.remove({sessionId: cnx.id});
-            
-          } catch(e) {
-            console.error('Exception', e);
-          }    
+            try {
+                connexions_counter -= 1;
+
+                console.info('Client Connection closed', cnx.id);
+                // Remove Curve Data
+                SourceBuilds.remove({ sessionId: cnx.id });
+
+            } catch (e) {
+                console.error('Exception', e);
+            }
         })
-      });
+    });
+
+    
 
     Meteor.methods({
         assemble: function (source, settings) {
@@ -94,7 +96,7 @@ export function init_assembler() {
                         s1 = s1 + "SAVE '-RUN.BIN'," + settings.startPoint + ',' + settings.endPoint + '-' + settings.startPoint + ',DSK,' + "'" + settings.filename + ".dsk' \n"
                         break;
                     default:
-                    settings.buildmode = 'sna';
+                        settings.buildmode = 'sna';
 
                     case 'sna':
 
@@ -114,33 +116,36 @@ export function init_assembler() {
 
                         //                        source = s0 + source;
                         break;
-   		    case 'z80':
-		    // ZX80 file
-		    // HOBETA?
-                    s0.push('BUILDZX');
-                    s0.push('BANK 0');
-                    
-                    //s0.push('HOBETA');
-                    //s0.push('ORG ' + settings.startPoint);
+                    case 'z80':
+                        // ZX80 file
+                        // HOBETA?
+                        s0.push('BUILDZX');
+                        s0.push('BANK 0');
 
-		    if (!settings.entryPoint)
-                        settings.entryPoint = settings.startPoint;
+                        //s0.push('HOBETA');
+                        //s0.push('ORG ' + settings.startPoint);
 
-		    if (settings.entryPoint != 'none')
-                        s0.push('RUN $');
-		    
-		    break;
+                        if (!settings.entryPoint)
+                            settings.entryPoint = settings.startPoint;
+
+                        if (!settings.stackPointer)
+                            settings.entryPointer = '$';
+
+                        if (settings.entryPoint != 'none')
+                            s0.push('RUN $,$');
+
+                        break;
                 }
-
-                let hs = '';
-                s0.forEach((item) => { hs += item + '\n'; });
-                source = hs + source + s1;
+                s0.push(' ');
+                let hs = s0.join(' : ');
+                console.info('Header:',  hs);
+                source = hs + source + '\n' + s1;
 
                 // Envoi d'un post au serveur de build
                 let rurl = encodeURIComponent(getParam('buildServerURL'));
                 let rport = getParam('buildServerPort');
 
-                
+
                 // En local
                 let post_options = {
                     host: rurl,

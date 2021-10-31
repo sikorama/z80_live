@@ -499,10 +499,10 @@ Template.SourceEdit.events({
     if (p) {
       let l = parseInt(p[0].slice(1, -1))
       l -= 1;
-      l -= sb.header.length;
+      // Corriger le numero de ligne en fonction du nombre de lignes du header
+      //l -= sb.header.length;
       let d = CodeMirrors['source'];
       d.focus();
-      // Corriger le numero de ligne en fonction du nombre de lignes du header
       d.setCursor({ line: l, ch: 0 });
     }
   }
