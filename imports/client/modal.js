@@ -81,4 +81,4 @@ Template.ModalWindow.events({
     if (event.keyCode === 27)
       Session.set("dialog_template", undefined);
   }
-})
+});

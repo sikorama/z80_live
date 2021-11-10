@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { Session } from 'meteor/session'
+import { Session } from 'meteor/session';
 import { addEvent, updateHeight } from './globals.js';
 
 import './mainpage.html';
@@ -18,7 +18,7 @@ Template.LoginForm.onRendered(function () {
     if (Meteor.userId()) {
       FlowRouter.go('/browse');
     }
-  })
+  });
 });
 
 Template.Page.helpers({
@@ -44,7 +44,7 @@ Template.Page.helpers({
   dialog_active: function () {
     return (!Session.equals('dialog_template', undefined));
   },
-})
+});
 
 Template.Page.events({
   'click .notif': function (event) {

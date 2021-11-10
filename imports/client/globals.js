@@ -7,7 +7,7 @@ import { Schemas } from './schemas.js';
 export function dev_log(s) {
   if (Meteor.isDevelopment) {
     console.info('[dev]', s);
-    return
+    return;
   }
 
   if (checkUserRole('admin'))
@@ -24,7 +24,7 @@ Template.registerHelper(
     if (gr === undefined) return false;
     return (gr.length > 1);
   }
-)
+);
 
 // Renvoie une chaine contenant la représentatin décimale d'un nombre, en ajoutant des espaces
 // pour séparer les milliers 10 000
@@ -99,8 +99,7 @@ Template.registerHelper('FormatHourOrDate', function (date) {
   if (now - ndate < 24 * 3600 * 1000) {
     return (ndate.toLocaleTimeString());
   } else {
-    return ddate = ndate.toLocaleDateString();
-    //return ddate;
+    return ndate.toLocaleDateString();
   }
 });
 
@@ -109,13 +108,13 @@ Template.registerHelper('FormatDate', function (date) {
   if (date === undefined) return undefined;
   let ndate = new Date(date);
   return (ndate.toLocaleDateString() + ' ' + ndate.toLocaleTimeString());
-})
+});
 
 Template.registerHelper('FormatDay', function (date) {
   if (date === undefined) return undefined;
   let ndate = new Date(date);
   return (ndate.toLocaleDateString());
-})
+});
 
 
 // --------------------- Gestion des formulaires -------------------------
@@ -163,7 +162,7 @@ export function addEvent(object, type, callback, disable) {
   }
   if (meth != "")
     console.warn("addEvent - non standard method", meth, object, type);
-};
+}
 
 function setElementHeight(elclass, elbotclass, botheight) {
   let delta = 0;
@@ -182,7 +181,7 @@ function setElementHeight(elclass, elbotclass, botheight) {
       let el = scrollable[i];
       let from_top = el.getBoundingClientRect().top;
       el.style.height = window.innerHeight - from_top - delta + 'px';
-    };
+    }
   }
 }
 
@@ -198,7 +197,7 @@ export function setHeight() {
   // Code Mirror Editor
   let textArea = document.getElementById('source');
   if (textArea) {
-    let cm = CodeMirrors['source'];
+    let cm = CodeMirrors.source;
     let from_top = textArea.getBoundingClientRect().top;
     let newh = '' + (window.innerHeight - from_top - 200) + 'px';
     dev_log('From top='+from_top+' Inner Height='+ window.innerHeight + '=>' + newh);
@@ -209,7 +208,7 @@ export function setHeight() {
   // Couldn't get textArea, return false
   return false;
 
-};
+}
 
 exports.updateHeight = _.debounce(setHeight, 500);
 
@@ -231,7 +230,7 @@ Template.registerHelper(
 function getRouteSortVar() {
   let p = 'Sort' + FlowRouter.current().path;
   return p;
-};
+}
 
 // Get internal sort object (may contain compound field names)
 function getRouteTableSort(def) {
@@ -239,12 +238,12 @@ function getRouteTableSort(def) {
   let v = Session.get(p);
   if (v === undefined) return def;
   return v;
-};
+}
 
 function setRouteTableSort(sv) {
   let p = getRouteSortVar();
   Session.set(p, sv);
-};
+}
 
 /**
  * Update Sorting for the table associated with the route
@@ -277,7 +276,7 @@ export function getRouteTableSortObj(def) {
   let o = getRouteTableSort(def);
   let so= {};
   let k = Object.keys(o)[0];
-  k.split(",").forEach((f)=> {so[f] = o[k]});
+  k.split(",").forEach((f)=> {so[f] = o[k];});
   return so;  
 }
 

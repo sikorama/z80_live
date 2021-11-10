@@ -61,7 +61,7 @@ Template.SourceEdit.onCreated(function () {
   Session.set('displayEmu', false);
   Session.set("srcFromDB", false);
   Session.set("srcChanged", false);
-  Session.setDefault('showAsmOutput', false)
+  Session.setDefault('showAsmOutput', false);
 
   // Autorun, so if we fork, we can subscribe to the new source
   this.autorun(() => {
@@ -82,22 +82,20 @@ Template.SourceEdit.onCreated(function () {
           Session.set("srcFromDB", true);
         }
         else {
-          const label = "You're not allowed to access this source code. Either it doesn't exist,or its owner has set it as private. Ask its owner to share it in another group (public for example)"
+          const label = "You're not allowed to access this source code. Either it doesn't exist,or its owner has set it as private. Ask its owner to share it in another group (public for example)";
           //notification(1, 'alert', label)
           alert(label);
           FlowRouter.go('/');
         }
       });
     }
-  })
+  });
 
   // debounce?
   this.autorun(() => {
     let sid = FlowRouter.getParam('sourceId');
     assemble(sid);
   });
-
-
 });
 
 Template.SourceEdit.helpers({
@@ -170,17 +168,17 @@ Template.SourceEdit.helpers({
     }
     catch (e) {
       console.error(e);
-      return 'http://'
+      return 'http://';
     }
   },
   emuoptions() {
     let bset = Session.get('buildSettings');
     if (bset.buildmode === 'z80') {
-      return "joystick=kempston&type=zx48k"
+      return "joystick=kempston&type=zx48k";
     }
     else {
       // cpc
-      return '&joystick=true'
+      return '&joystick=true';
     }
   },
   // Get File URL
@@ -188,7 +186,7 @@ Template.SourceEdit.helpers({
     let cid = Session.get('curBuildSession');
     let url = Session.get('fileServerURL');
     let bset = Session.get('buildSettings');
-    let res = undefined;
+    let res;
 
     let sb = SourceBuilds.findOne({
       buildId: cid
@@ -231,7 +229,7 @@ Template.SourceEdit.helpers({
       if (bset.command)
         cmd += '&input=' + bset.command + '%0A';
 
-    return ({ file: res, cmd: cmd })
+    return ({ file: res, cmd: cmd });
   },
 
   // Get Build Result
@@ -243,7 +241,7 @@ Template.SourceEdit.helpers({
     let sb = SourceBuilds.findOne({
       buildId: cid
     });
-    return sb
+    return sb;
   },
   status(status) {
     if (status == 1) return ('warn');
@@ -497,11 +495,9 @@ Template.SourceEdit.events({
     let rx = RegExp(':[0-9]+]');
     let p = rx.exec(event.target.textContent);
     if (p) {
-      let l = parseInt(p[0].slice(1, -1))
+      let l = parseInt(p[0].slice(1, -1));
       l -= 1;
-      // Corriger le numero de ligne en fonction du nombre de lignes du header
-      //l -= sb.header.length;
-      let d = CodeMirrors['source'];
+      let d = CodeMirrors.source;
       d.focus();
       d.setCursor({ line: l, ch: 0 });
     }

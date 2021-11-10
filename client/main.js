@@ -17,7 +17,7 @@ init_cm();
 Accounts.ui.config({
   //passwordSignupFields: 'USERNAME_ONLY'
   passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL'
-})
+});
 
 // English by defaut
 //T9n.setLanguage('en');
@@ -40,10 +40,10 @@ Session.setDefault('dumpFormat', 'basic');
 Session.setDefault('buildSettings', {buildmode: 'sna'});
 
 Session.setDefault("sourceSearchTags",[]);  // Liste des tags pour la recherche courante
-Session.setDefault("sourceSearchString",'')
-Session.setDefault("sourceSearchSkip",0)
-Session.setDefault("sourceSearchFilters",[])
-Session.setDefault("sourceSearchGroups",[])
+Session.setDefault("sourceSearchString",'');
+Session.setDefault("sourceSearchSkip",0);
+Session.setDefault("sourceSearchFilters",[]);
+Session.setDefault("sourceSearchGroups",[]);
 
 Session.setDefault('sourceSortDir',1);
 Session.setDefault('sourceSortField','name');

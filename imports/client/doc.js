@@ -4,7 +4,7 @@ import { Session } from 'meteor/session';
 
 Template.Documentation.onRendered(function() {
     Meteor.call('getParam','discord_invite', function(err,res) {
-        Session.set('discord_invite',res)
+        Session.set('discord_invite',res);
     });
 });
 

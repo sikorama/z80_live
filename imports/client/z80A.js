@@ -100,4 +100,4 @@ exports.init_cm = function() {
 
   CodeMirror.defineMIME("text/x-z80A", "z80A");
   //  cm.defineMIME("text/x-ez80", { name: "z80", ez80: true });
-}
+};

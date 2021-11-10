@@ -4,10 +4,6 @@
   - les ajouts de code source
  */
 
-import {
-  SourceAsm,
-} from '../imports/api/sourceAsm.js';
-
 import { getParam } from './settings.js';
 
 // Pour l'envoi de notif rocket.chat
@@ -78,4 +74,4 @@ exports.init_notifications = function () {
       }
     }
   });
-}
+};

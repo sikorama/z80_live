@@ -85,7 +85,7 @@ Meteor.methods({
 
     SourceAsm.find().forEach(function (item) {
       archive.append(item.code, { name: item.name + '.asm' });
-    })
+    });
 
     archive.finalize();
 
@@ -93,6 +93,6 @@ Meteor.methods({
       //      cb(null, JSON.stringify(outputStreamBuffer.getContents())); //"errprout","data");
       outputStreamBuffer.end();
       cb(null, outputStreamBuffer.getContents());
-    })
+    });
   })
 });

@@ -1,7 +1,7 @@
 // Routes définies au niveau du client avec FlowRouter.
 import {
   Session
-} from 'meteor/session'
+} from 'meteor/session';
 
 FlowRouter.route('/login', {
   action: function(params, queryParams) {

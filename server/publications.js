@@ -47,7 +47,7 @@ export function init_publications() {
         // ??
         if (doc.buildOptions)
           if (doc.buildOptions.buildmode == "lib")
-            doc.buildOptions.filename = doc.name
+            doc.buildOptions.filename = doc.name;
 
         //console.error('insertion', doc.name);
         return SourceAsm.insert(doc);
@@ -277,7 +277,7 @@ export function init_publications() {
         SourceAsm.update({}, { $unset: { numvotes: 1, score: 1 } }, { multi: 1 });
       }
     }
-  })
+  });
 
   // Votes
   Meteor.methods({
@@ -299,5 +299,5 @@ export function init_publications() {
        new_rank = (s.score + ds) / (s.numvotes + dv);
       SourceAsm.update(srcid, { $inc: { score: ds, numvotes: dv }, $set: { rank: new_rank } });
     }
-  })
+  });
 }

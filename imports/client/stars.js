@@ -28,7 +28,7 @@ Template.Stars.onRendered(function(){
   const d = Template.currentData();
   if (d.id)
     this.subscribe('userratings', d.id);
-})
+});
 
 
 Template.Stars.helpers({

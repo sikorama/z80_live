@@ -11,6 +11,7 @@
     "bcrypt": "^5.0.1",
     "codemirror": "^5.61.1",
     "httpreq": "^0.4.24",
+    "jshint": "^2.13.1",
     "meteor-node-stubs": "^0.4.1",
     "mime": "^2.4.6",
     "npm": "^6.14.13",

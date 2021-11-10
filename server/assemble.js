@@ -25,7 +25,7 @@ export function init_assembler() {
             } catch (e) {
                 console.error('Exception', e);
             }
-        })
+        });
     });
 
     
@@ -48,7 +48,7 @@ export function init_assembler() {
                 // Ce qui est plus général que:
                 //source = source.replace(/[éèê]/g, 'e');
 
-                let post_function = '/build'
+                let post_function = '/build';
 
                 console.info('Assemble settings:', settings);
 
@@ -56,7 +56,7 @@ export function init_assembler() {
                 if (!settings.filename) settings.filename = 'temp_' + buildId; // + '.asm';
 
                 if (!settings.filename.endsWith('.asm'))
-                    settings.filename += '.asm'
+                    settings.filename += '.asm';
 
                 let s0 = [];
                 let s1 = '';
@@ -93,11 +93,11 @@ export function init_assembler() {
                         s0.push('_default_start:');
 
                         s1 = '_default_end:\n';
-                        s1 = s1 + "SAVE '-RUN.BIN'," + settings.startPoint + ',' + settings.endPoint + '-' + settings.startPoint + ',DSK,' + "'" + settings.filename + ".dsk' \n"
+                        s1 = s1 + "SAVE '-RUN.BIN'," + settings.startPoint + ',' + settings.endPoint + '-' + settings.startPoint + ',DSK,' + "'" + settings.filename + ".dsk' \n";
                         break;
                     default:
                         settings.buildmode = 'sna';
-
+                        // Pas de break ici
                     case 'sna':
 
                         if (!settings.startPoint)

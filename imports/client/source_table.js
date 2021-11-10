@@ -44,7 +44,7 @@ Template.SourceTable.helpers({
     let selector = {};
 
     if (curSearch.length > 0) {
-      let fieldSearch = { "$regex": ".*" + curSearch + ".*", "$options": "i" }
+      let fieldSearch = { "$regex": ".*" + curSearch + ".*", "$options": "i" };
       selector = {
         '$or':
           [{ name: fieldSearch },
@@ -74,9 +74,9 @@ Template.SourceTableItem.helpers({
       let u =Meteor.users.findOne(id);
       if (u) return u.username; 
     }
-    return 'Guest'
+    return 'Guest';
   },
-})
+});
 
 Template.SourceTableItem.events({
   "click td": function (event) {

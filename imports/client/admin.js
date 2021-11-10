@@ -33,7 +33,7 @@ Template.AdminSession.helpers({
       }
     }
     return (res.sort(function (a, b) {
-      return (a.k > b.k ? 1 : -1)
+      return (a.k > b.k ? 1 : -1);
     }));
   }
 });
@@ -65,7 +65,7 @@ Template.AdminSettings.helpers({
       case 'boolean':
         if (param.value === true)
           return 'checked';
-        else return '';
+        return '';
       default:
         return '';
     }
@@ -104,12 +104,12 @@ Template.AdminSettings.events({
         default:
           v = event.target.value;
           break;
-      };
+      }
       Settings.update(p._id, {
         '$set': {
           'value': v
         }
-      })
+      });
     }
   }
 });
@@ -148,7 +148,7 @@ Template.AdminUsers.onRendered(function () {
 
 Template.AdminUsers.helpers({
   groupList: function () {
-    return SourceGroups.find({}, { fields: { name: 1 } }).fetch().map(function (v) { return { value: v.name, label: v.name } });
+    return SourceGroups.find({}, { fields: { name: 1 } }).fetch().map(function (v) { return { value: v.name, label: v.name }; });
   },
   userList: function () {
     return Meteor.users.find({});
@@ -161,7 +161,7 @@ Template.AdminUsers.helpers({
   },
   doc: function () {
     if (Session.equals('SelectedUser'), undefined)
-      return {}
+      return {};
     return Meteor.users.findOne(Session.get('SelectedUser'));
   }
 });
@@ -206,7 +206,7 @@ Template.AdminGroups.helpers({
   numUsers: function (g) {
     if (g)
       return (Meteor.users.find({ groups: {$in: [g]} }).count());
-    return 0
+    return 0;
   }
 });
 

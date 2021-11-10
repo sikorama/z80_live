@@ -57,13 +57,13 @@ export function setUserGroups(userid, groups) {
         'groups': groups
       }
     });
-};
+}
 
 export function setUserRoles(userid, roles) {
-  console.warn("set User Roles", userid, roles)
+  console.warn("set User Roles", userid, roles);
   if (roles != undefined)
     Roles.setUserRoles(userid, roles);
-};
+}
 
 /**
  * 
@@ -130,7 +130,7 @@ function qaddUser(name, mail, pw, roles, groups) {
 function createDefaultAccounts() {
   if (Meteor.users.find().count()===0)
     qaddUser('admin', 'admin@rasmlive.amstrad.info', 'password', ['admin', 'superadmin'], ['public']);
-};
+}
 
 export function init_users() {
   Meteor.methods({
@@ -138,7 +138,7 @@ export function init_users() {
       if (isAdmin(this.userId)) {
         // All sources of this user wich are not public
         // Should be moved to a specific group (admin or no-user)
-        Meteor.users.remove(userid)
+        Meteor.users.remove(userid);
       }
     },
     insertUser: function (doc) {
@@ -173,7 +173,7 @@ export function init_users() {
             if (doc.modifier.$set !== undefined)
               if (doc.modifier.$set.roles !== undefined)
                 if (doc.modifier.$set.roles.indexOf('superadmin') >= 0) {
-                  console.error("Ajout d'un role superadmin illégal")
+                  console.error("Ajout d'un role superadmin illégal");
                   return;
                 }
           }
@@ -187,7 +187,7 @@ export function init_users() {
     forcePassword: function (doc) {
       if (isAdmin(this.userId)) {
         try {
-          const newPassword = doc.modifier['$set'].password;
+          const newPassword = doc.modifier.$set.password;
           console.error(doc, newPassword);
           Accounts.setPassword(doc._id, newPassword);
         }
@@ -201,7 +201,7 @@ export function init_users() {
         const user = Meteor.users.findOne({
           'username': name
         });
-        console.warn("SetUserRoles", name, roles)
+        console.warn("SetUserRoles", name, roles);
         if (user != undefined)
           setUserRoles(user._id, roles);
       }
