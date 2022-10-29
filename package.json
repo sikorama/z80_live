@@ -1,5 +1,5 @@
 {
-  "name": "rasm-live",
+  "name": "z80live",
   "private": true,
   "scripts": {
     "start": "meteor run",
