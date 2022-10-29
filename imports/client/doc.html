@@ -3,16 +3,18 @@
 
   <h1 class="home-title">About</h1>
 
-  RASM-Live is a website powered by RASM (Roudoudou's Assembler) by Edouard Bergé and TinyCPC by Andre Weissflog.
-  It is developped by Stephane Sikora with MeteorJS framework. Special Thanks to Tronic/GPA for hosting the server,
-  and to all contibutors.
+  Z80Live is a website aimed to editing, assembling and running Z80 assembly code directly on your web browser
+  
+  It is developped by Stephane Sikora with MeteorJS framework and is powered by Tiny8bit Emulator by Andre Weissflog.
 
-  Join our <a href="{{discord}}">Discord server </a>
+  Special Thanks to Tronic/GPA for hosting the server, and to all contibutors who share their piece of code.
 
-  <h1 class="home-title"> RASM LIVE Shortcuts </h1>
+  {{#if discord}}
+  Join our <a href="{{discord}}">Discord server </a> for more news and also if you wanna have an account and share your code!
+  {{/if}}
 
+<h1 class="home-title">Shortcuts </h1>
   <h3 class="home-title"> Editor Shortcuts</h3>
-
   <ul>
     <li>
       CTRL+B: Toggle on/off auto rebuild mode
@@ -33,25 +35,26 @@
     </li>
   </ul>
 
-
   <h1 class="home-title"> Links </h1>
+  
+  <h3 class="home-title"> Tiny 8 bit Emulator </h3>
+  <ul>
+    <li> <a href="https://floooh.github.io/tiny8bit/"> Tiny8bit website</a></li>
+    <li> <a href="https://floooh.github.io/2019/01/05/wasm-embedding.html">Embedding Tiny8bit using Web Assembly</a>
+    </li>
+  </ul>
 
+  <h3 class="home-title">CrocoDS Emulator </h3>
+  
+  
   <h3 class="home-title">RASM User Manual & source</h3>
-
   <ul>
     <li> <a href="https://github.com/sikorama/rasm-doc/blob/master/pdf/rasm_fr.pdf" target="_blank">Documentation de RASM en Français (PDF)</a></li>
     <li> <a href="https://github.com/sikorama/rasm-doc/blob/master/pdf/rasm_en.pdf" target="_blank">RASM Documentation in English (PDF)</a></li>
     <li> <a href="https://github.com/EdouardBERGE/rasm">Latest RASM official release</a> </li>
   </ul>
 
-  <h3 class="home-title"> TinyCPC </h3>
-  <ul>
-    <li> <a href="https://floooh.github.io/tiny8bit/"> Tiny8bit website</a></li>
-
-    <li> <a href="https://floooh.github.io/2019/01/05/wasm-embedding.html">Embedding Tiny8bit using Web Assembly</a>
-    </li>
-  </ul>
-
-
+  <h3 class="home-title">UZ80</h3>
+ 
 
 </template>

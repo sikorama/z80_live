@@ -52,7 +52,7 @@ exports.init_notifications = function () {
         }
 
         // Ajout du channel en fonction du type de serveur
-        payload.channel = "#rasm_live";
+        payload.channel = "#z80_live";
 
         let url = getParam('rocketIP');
         let token = getParam('rocketToken');
