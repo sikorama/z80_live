@@ -14,6 +14,25 @@ import { assertMethodAccess,args } from './utils';
 //(Ex: restriction des droits si on est installateur)
 //Faire une fonction generale avec differents roles que l'on peut tester (cf api/roles.js?)
 
+
+Meteor.methods({
+  'migrate1': function() {
+    try {
+      Package['alanning:roles'].Roles._forwardMigrate()
+    } catch(e) {
+      Log.error(e.stack);
+    }
+  },
+  'migrate2': function() {
+    try {
+      Package['alanning:roles'].Roles._forwardMigrate2()
+    } catch(e) {
+      Log.error(e.stack);
+    }
+  }
+
+});
+
 //Renvoie vrai si l'utilisateur a un role donné
 //Par défaut les superadmins on tous les roles
 // roles: tableau ou string (séparé par des espaces)
@@ -342,6 +361,9 @@ Meteor.methods({
   },
 
 });
+
+
+
 
 export function init_users() {
   createDefaultAccounts();
