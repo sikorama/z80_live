@@ -5,6 +5,7 @@ import { init_notifications } from './notifications.js';
 import { init_publications } from './publications.js';
 import { getParam, init_settings } from './settings.js';
 import { init_users } from './user_management.js';
+import { Log } from 'meteor/logging';
 
 import '../imports/api/settings-server.js';
 
@@ -41,7 +42,7 @@ Meteor.startup(() => {
       });
     }
     n = SourceAsm.findOne({}).count;
-    //    console.error(n,"sources");
+    //    Log.error(n,"sources");
 
     // Notification de démarrage du serveur meteor
     if (getParam('rocketNotifStart') === true) {
@@ -50,7 +51,7 @@ Meteor.startup(() => {
       });
     }
   } catch (e) {
-    console.error(e.stack);
+    Log.error(e.stack);
   }
 });
 

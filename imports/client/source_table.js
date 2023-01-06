@@ -6,7 +6,7 @@ import './source_table.html';
 import './searchArea.js';
 import './source_select.js';
 
-import { dev_log, getParentId } from './globals.js';
+import { getParentId } from './globals.js';
 
 
 Template.SourceTable.onRendered(function () {

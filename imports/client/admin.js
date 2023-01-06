@@ -142,11 +142,28 @@ Template.AdminBuilds.events({
 Template.AdminUsers.onRendered(function () {
   this.subscribe("userList");
   this.subscribe("groupList");
+  this.subscribe("userRoles");
 
   updateHeight();
 });
 
+function getdoc(sel) {
+  let doc = Meteor.users.findOne(sel);
+  if (!doc)
+    return;
+  let r = Meteor.roleAssignment.find({ 'user._id': doc._id }).fetch();
+  doc.roles = r.map((item) => { return item.role._id; });
+  return doc;
+}
+
+
 Template.AdminUsers.helpers({
+  roles(uid) {
+    return getdoc({_id: uid}).roles;
+    let r = Meteor.roleAssignment.find({ 'user._id': uid }).fetch();
+    //console.error(uid,r);
+    return r;
+  },
   groupList: function () {
     return SourceGroups.find({}, { fields: { name: 1 } }).fetch().map(function (v) { return { value: v.name, label: v.name }; });
   },
@@ -162,7 +179,9 @@ Template.AdminUsers.helpers({
   doc: function () {
     if (Session.equals('SelectedUser'), undefined)
       return {};
-    return Meteor.users.findOne(Session.get('SelectedUser'));
+    return getdoc(Session.get('SelectedUser'));
+
+//    return Meteor.users.findOne(Session.get('SelectedUser'));
   }
 });
 
@@ -186,7 +205,7 @@ Template.AdminUsers.events({
     }
   },
   "click tr": function (event) {
-    Session.set('SelectedUser',event.target.id);
+    Session.set('SelectedUser',event.currentTarget.id);
   }
 });
 

@@ -16,6 +16,7 @@ import { Settings } from '../imports/api/settings-server.js';
 import { SourceAsm, SourceBuilds, SourceGroups, UserRatings } from '../imports/api/sourceAsm.js';
 import { sendNotifRocket } from './notifications.js';
 import { getUserGroups, isAdmin } from './user_management.js';
+import { Log } from 'meteor/logging';
 
 
 // All Publications Declarations
@@ -24,7 +25,7 @@ export function init_publications() {
     // Create a new source, with default values
     // Returns the new id, after insertion
     insertSource: function (doc) {
-      //console.error('insertSource', doc);
+      //Log.error('insertSource', doc);
       if (this.userId) {
         // Rajoute les champs eventuellements manquants
         doc.date = Date.now();
@@ -49,7 +50,7 @@ export function init_publications() {
           if (doc.buildOptions.buildmode == "lib")
             doc.buildOptions.filename = doc.name;
 
-        //console.error('insertion', doc.name);
+        //Log.error('insertion', doc.name);
         return SourceAsm.insert(doc);
       }
       return false;
@@ -57,7 +58,7 @@ export function init_publications() {
 
     // Deprecated as builds are automatically removed when a user session is over
     clearBuilds: function () {
-      console.error('Removing all builds');
+      Log.error('Removing all builds');
       SourceBuilds.remove({});
     }
   });
@@ -197,7 +198,7 @@ export function init_publications() {
         fields: {
           username: 1,
           emails: 1,
-          roles: 1,
+          //roles: 1,
           groups: 1,
         }
       };
@@ -233,9 +234,12 @@ export function init_publications() {
   });
 
 
+
+
+
   SourceGroups.allow({
     insert(userid, doc) {
-      console.error("insert group", userid, isAdmin(userid));
+      Log.error("insert group", userid, isAdmin(userid));
       if (isAdmin(userid))
         return true;
     },
@@ -271,10 +275,10 @@ export function init_publications() {
     'resetVotes': function () {
       if (isAdmin(this.userId)) {
         // Reset Ratings
-        console.error('Reset Ratings!');
+        Log.error('Reset Ratings!');
         UserRatings.remove({});
-        console.error('num ratings:', UserRatings.find().count());
-        SourceAsm.update({}, { $unset: { numvotes: 1, score: 1 } }, { multi: 1 });
+        Log.error('num ratings:', UserRatings.find().count());
+        SourceAsm.update({}, { $unset: { numvotes: 1, score: 1 } }, { multi: true });
       }
     }
   });
@@ -301,3 +305,12 @@ export function init_publications() {
     }
   });
 }
+
+Meteor.methods({
+  'getSourceIdFromSlugName': function(slugname) {
+    let s = SourceAsm.findOne({slugname:slugname});
+    if (!s)
+      s = SourceAsm.findOne({name:slugname});
+    return s;
+  }
+  });

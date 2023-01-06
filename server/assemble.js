@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { SourceBuilds } from '../imports/api/sourceAsm.js';
 import { getParam } from './settings.js';
+import { Log } from 'meteor/logging';
 
 const http = require('http');
 
@@ -12,23 +13,23 @@ export function init_assembler() {
     // When a client closes a session, clean all build information
     Meteor.onConnection(function (cnx) {
         connexions_counter += 1;
-        console.info('Connection', connexions_counter, 'from client', cnx.id);
+        Log.info('Connection '+ connexions_counter+ ' from client '+ cnx.id);
 
         cnx.onClose(function () {
             try {
                 connexions_counter -= 1;
 
-                console.info('Client Connection closed', cnx.id);
+                Log.info('Client Connection closed '+ cnx.id);
                 // Remove Curve Data
                 SourceBuilds.remove({ sessionId: cnx.id });
 
             } catch (e) {
-                console.error('Exception', e);
+                Log.error(e);
             }
         });
     });
 
-    
+
 
     Meteor.methods({
         assemble: function (source, settings) {
@@ -50,7 +51,7 @@ export function init_assembler() {
 
                 let post_function = '/build';
 
-                console.info('Assemble settings:', settings);
+                Log.info('Assemble settings:'+ settings);
 
                 // SI on a pas précisé de nom, on utilise l'id de session comme nom de fichier
                 if (!settings.filename) settings.filename = 'temp_' + buildId; // + '.asm';
@@ -97,7 +98,7 @@ export function init_assembler() {
                         break;
                     default:
                         settings.buildmode = 'sna';
-                        // Pas de break ici
+                    // Pas de break ici
                     case 'sna':
 
                         if (!settings.startPoint)
@@ -138,7 +139,7 @@ export function init_assembler() {
                 }
                 s0.push(' ');
                 let hs = s0.join(' : ');
-                console.info('Header:',  hs);
+                Log.info('Header:'+ hs);
                 source = hs + source + '\n' + s1;
 
                 // Envoi d'un post au serveur de build
@@ -180,14 +181,14 @@ export function init_assembler() {
 
                             SourceBuilds.insert(ores);
                         } catch (e) {
-                            console.error(e.stack, resp);
+                            Log.error(e.stack);
                         }
                     }));
                 }));
 
                 if (post_req) {
                     post_req.on('error', function (errd) {
-                        console.error('POST Request Error:', errd);
+                        Log.error('POST Request Error:'+ errd);
                     });
 
                     post_req.write(source);
@@ -197,7 +198,7 @@ export function init_assembler() {
                 return buildId; // Pour faire la recherche
 
             } catch (e) {
-                console.error('Assemble :', e);
+                Log.error(e);
                 return 0;
             }
         },

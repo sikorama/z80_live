@@ -3,16 +3,8 @@ import { Session } from 'meteor/session';
 import { checkUserRole } from '../api/roles';
 import { SourceAsm } from '../api/sourceAsm.js';
 import { Schemas } from './schemas.js';
-
-export function dev_log(s) {
-  if (Meteor.isDevelopment) {
-    console.info('[dev]', s);
-    return;
-  }
-
-  if (checkUserRole('admin'))
-    console.info('[dev]',s);
-}
+import { Log } from 'meteor/logging';
+import CodeMirror from 'codemirror';
 
 Template.registerHelper(
   'userHasMultipleGroups', function () {
@@ -81,11 +73,6 @@ Template.registerHelper('isUserRole', function (roles) {
   return checkUserRole(roles);
 });
 
-// Transforme un type de composant en label
-Template.registerHelper('typeLabel', function (type) {
-  return (getElementLabel(type));
-});
-
 // Jour ou heure selon que c'est le meme jour qu'actuellement
 // Ou plutot si il y a moins de 24h
 Template.registerHelper('FormatHourOrDate', function (date) {
@@ -147,7 +134,7 @@ export function addEvent(object, type, callback, disable) {
     } else if (object.attachEvent) {
       meth = 'attachEvent';
       if (disable === true)
-        console.error("Remove attachEvent not implemented");
+        Log.error("Remove attachEvent not implemented");
       else
         object.attachEvent("on" + type, callback);
     } else {
@@ -158,16 +145,16 @@ export function addEvent(object, type, callback, disable) {
         object["on" + type] = callback;
     }
   } catch (e) {
-    console.error(e.stack);
+    Log.error(e.stack);
   }
   if (meth != "")
-    console.warn("addEvent - non standard method", meth, object, type);
+    Log.warn("addEvent - non standard method", meth, object, type);
 }
 
 function setElementHeight(elclass, elbotclass, botheight) {
   let delta = 0;
   if (elbotclass) {
-    sc = document.getElementsByClassName(elbotclass)[0];
+    let sc = document.getElementsByClassName(elbotclass)[0];
     if (sc) {
       delta = botheight;
     }
@@ -190,18 +177,19 @@ function setElementHeight(elclass, elbotclass, botheight) {
 // Permet de gerer proprement les scroll bars.
 export function setHeight() {
   setElementHeight('scrollable-panel');
-   setElementHeight('scrollable-build-panel', null, 50);
+  setElementHeight('scrollable-build-panel', null, 50);
   setElementHeight('scrollable-form', 'scrollable-form-status', 32);
   setElementHeight('scrollable-search', 'scrollable-search-status', 24);
 
   // Code Mirror Editor
   let textArea = document.getElementById('source');
   if (textArea) {
-    let cm = CodeMirrors.source;
+    let cm = CodeMirror.source;
     let from_top = textArea.getBoundingClientRect().top;
     let newh = '' + (window.innerHeight - from_top - 200) + 'px';
-    dev_log('From top='+from_top+' Inner Height='+ window.innerHeight + '=>' + newh);
-    cm.setSize(null, newh);
+    Log.debug('From top='+from_top+' Inner Height='+ window.innerHeight + '=>' + newh);
+    if (cm)
+      cm.setSize(null, newh);
     return true;
   }
 

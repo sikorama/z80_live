@@ -50,7 +50,7 @@ Template.Page.events({
   'click .notif': function (event) {
     Session.set('notifications', []);
     if (event.target.id) {
-      dest = '/edit/' + event.target.id;
+      let dest = '/edit/' + event.target.id;
       if (event.target.className.indexOf('alert') >= 0)
         dest += '/functions';
       else

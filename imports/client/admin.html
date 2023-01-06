@@ -235,14 +235,16 @@
           </tr>
         </thead>
         <tbody>
-          {{#each userList}}
-          <tr class="">
-            <td id="{{_id}}">
-              <span class="{{statusClass status}}">&#11044;</span> {{username}}
+          {{#each u in userList}}
+          <tr id="{{u._id}}" class="">
+            <td>
+              <span class="{{statusClass u.status}}">&#11044;</span> {{u.username}}
             </td>
-            <td id="{{_id}}">{{#each emails}} {{address}} {{/each}}</td>
-            <td id="{{_id}}">{{#each role in roles}}{{role}} {{/each}}</td>
-            <td id="{{_id}}">{{#each group in groups}}{{group}} {{/each}}</td>
+
+            <td>{{#each u.emails}} {{address}} {{/each}}</td>
+            <td>{{#each role in (roles u._id)}}{{role}} {{/each}}</td>
+            <td>{{#each group in u.groups}}{{group}} {{/each}}</td>
+
           </tr>
           {{/each}}
         </tbody>

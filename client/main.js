@@ -11,8 +11,12 @@ import '../imports/client/source_table.js';
 import '../imports/client/stars.js';
 import { init_cm } from '../imports/client/z80A.js';
 import '../imports/routes.js';
+import {Log } from 'meteor/logging';
+
 
 init_cm();
+
+Log.info('Starting app');
 
 Accounts.ui.config({
   //passwordSignupFields: 'USERNAME_ONLY'
@@ -51,4 +55,4 @@ Session.setDefault('sourceSortField','name');
 Session.setDefault("curSelected",'');
 
 //Session.set("srcFromDB", true); //
-Session.setDefault("autobuild",false); // Auto build, enabled by default
+Session.setDefault("autobuild",false); // Auto build, disabled by default

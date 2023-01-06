@@ -89,6 +89,14 @@ FlowRouter.route('/edit', {
   }
 });
 
+// Direct Full screen view with a link to source edition
+FlowRouter.route('/view/:sourceId', {
+  action: function(params, queryParams) {
+    BlazeLayout.render('Page', {
+      main: 'View'
+      });
+  }
+});
 
 
 // ---------------------- Admin ------------------------

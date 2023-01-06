@@ -1,4 +1,5 @@
 /*Settings*/
+import { Log } from 'meteor/logging';
 
 import {
 //  Myservers,
@@ -32,7 +33,7 @@ export function getParam(param) {
       'param': param
     }).value;
   } catch (e) {
-    console.error('Parameter not found:', param);
+    Log.error('Parameter not found:', param);
     return undefined;
   }
 }

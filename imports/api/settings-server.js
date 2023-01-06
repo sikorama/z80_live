@@ -1,3 +1,4 @@
+
 import { Mongo } from 'meteor/mongo';
 //import { AccountsTemplates } from 'meteor/useraccounts:core';
 
@@ -7,7 +8,7 @@ export const Settings = new Mongo.Collection('settings');
 // Doesn't seem to work ;(
     try {
 
-       console.error('----- init account templates');
+       Log.error('----- init account templates');
 
         AccountsTemplates.configure({
           forbidClientAccountCreation:  false,
@@ -15,7 +16,7 @@ export const Settings = new Mongo.Collection('settings');
           showForgotPasswordLink: false,
         });
       } catch (e) {
-        console.error(e);
+        Log.error(e);
       }
       
 */

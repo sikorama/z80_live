@@ -5,24 +5,23 @@
  */
 
 import { getParam } from './settings.js';
+import { Log } from 'meteor/logging';
 
 // Pour l'envoi de notif rocket.chat
 let httpreq = require('httpreq');
 
 // Notification modification/insertion ficher
-function sendNotifRocket(typestr, db, user, info, relurl, icon) {
+export function sendNotifRocket(typestr, db, user, info, relurl, icon) {
   if (getParam('rocketNotifUpdates') === true)
     Meteor.call('sendRocket', typestr + ' ' + db + ' "' + info + '" par ' + user, '', icon, getParam('URL') + '/' + relurl);
   else {
-    console.info(typestr + db + ' "' + info + '" par ' + user);
+    Log.info(typestr + db + ' "' + info + '" par ' + user);
   }
 }
 
-exports.sendNotifRocket = sendNotifRocket;
-
 // Hooks pour notifications (matb33:collection-hooks)
 // Permet d'avoir acces au _id a l'insertion et donc d'envoyer un lien avec la reference
-exports.init_notifications = function () {
+export function init_notifications() {
   Meteor.methods({
     sendRocket: function (title, text, icon, title_link, additional_attachments) {
 
@@ -63,15 +62,15 @@ exports.init_notifications = function () {
           json: payload
         }, function (err, res) {
           if (!err) {
-            //console.info("sendRocket: " + JSON.stringify(res));
+            //Log.info("sendRocket: " + JSON.stringify(res));
           } else {
-            console.error("sendRocket:", res, err);
+            Log.error(err);
           }
         });
 
       } catch (e) {
-        console.error('sendRocket: ', text, e.stack);
+        Log.error('sendRocket: '+ e.stack);
       }
     }
   });
-};
+}

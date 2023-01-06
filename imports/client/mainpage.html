@@ -9,7 +9,9 @@
 
 <!-- Main Page Template -->
 <template name="Page">
-      <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+   <!--
+     <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+   -->
 
   <div>
    
@@ -35,8 +37,21 @@
 </template>
 
 <template name="LoginForm">
+
+  LOGIN
+<p>
+  {{>loginButtons}}
+
+</p>
+  {{>loginButtons}}
+
+
+<p>sep</p>
+  {{>loginButtons align="right"}}
+
+
   <div class="pure-form login" id="loginform">
-    {{>loginButtons }}
+    {{>loginButtons}}
   </div>
 </template>
 
@@ -45,15 +60,22 @@
 <template name="PageTop">
   <nav class="pure-menu pure-menu-horizontal main-menu">
     {{#unless isMobile}}
-    <a class="pure-menu-heading pure-menu-link" href="/">
+    <a  href="/">
       {{#if isSessionVarDefined "logoFile"}}
-      <img src="{{getSessionVar "logoFile"}}" alt="" />
+  <div class="pure-menu-heading pure-menu-link ">
+      <img class="pure-img img-heading" src="{{getSessionVar "logoFile"}}" alt="" />
+    </div>
       {{/if}}
-      <div class="ko">{{getSessionVar "logoText"}}</div>
+<!--      <div class="ko">{{getSessionVar "logoText"}}</div> -->
+
     </a>
     {{/unless}}
 
     <ul class="pure-menu-list main-menu-list">
+      <li class="pure-menu-item">
+        <a href="https://z80live.amstrad.info" class="pure-menu-link ">Home</a>
+      </li>
+
       <li class="pure-menu-item">
         <a href="/browse" class="pure-menu-link {{active "browse"}}">Sources</a>
       </li>
@@ -105,7 +127,7 @@
       <li class="pure-menu-item pure-menu-has-children">
         {{>loginButtons align="right"}}
        </li>
-      {{/if}}
+       {{/if}}
     </ul>
   </nav>
 </template>

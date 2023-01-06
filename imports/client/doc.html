@@ -3,19 +3,32 @@
 
   <h1 class="home-title">About</h1>
 
-  Z80Live is a website aimed to editing, assembling and running Z80 assembly code directly on your web browser
+  <p class="about">
+    Z80Live is a website aimed to editing, assembling and running Z80 assembly code directly on your web browser.
+  </p>
   
-  It is developped by Stephane Sikora with MeteorJS framework and is powered by Tiny8bit Emulator by Andre Weissflog.
+  <p class="about">
+    It is developped by Stephane Sikora with MeteorJS framework and is powered by Tiny8bit Emulator by Andre Weissflog.
+  </p>
 
-  Special Thanks to Tronic/GPA for hosting the server, and to all contibutors who share their piece of code.
+  <p class="about">
+    It integrates various open source z80 assemblers, such as <a href="http://cngsoft.no-ip.org/uz80.htm">UZ80</a> by CNG, <a href="https://github.com/EdouardBERGE/rasm">Rasm</a> by Roudoudou and <a href="https://github.com/Konamiman/Sjasm"> SJAsm</a> originally created by  Sjoerd Mastijn.
+  </p>
 
+  <p class="about">
+    Special Thanks to Tronic/GPA for hosting the server, and to all contibutors who share their piece of code.
+  </p>
+  
   {{#if discord}}
+  <h2 class="home-title">Join the community!</h2>
+  <p class="about">
   Join our <a href="{{discord}}">Discord server </a> for more news and also if you wanna have an account and share your code!
+  </p>
   {{/if}}
 
-<h1 class="home-title">Shortcuts </h1>
-  <h3 class="home-title"> Editor Shortcuts</h3>
-  <ul>
+
+<h1 class="home-title">Editor Shortcuts </h1>
+  <ul class="about">
     <li>
       CTRL+B: Toggle on/off auto rebuild mode
     </li>
@@ -37,24 +50,33 @@
 
   <h1 class="home-title"> Links </h1>
   
-  <h3 class="home-title"> Tiny 8 bit Emulator </h3>
-  <ul>
+  <h2 class="home-title"> Tiny 8 bit Emulator </h2>
+  <ul class="about">
     <li> <a href="https://floooh.github.io/tiny8bit/"> Tiny8bit website</a></li>
     <li> <a href="https://floooh.github.io/2019/01/05/wasm-embedding.html">Embedding Tiny8bit using Web Assembly</a>
     </li>
   </ul>
 
-  <h3 class="home-title">CrocoDS Emulator </h3>
+  <h2 class="home-title">CrocoDS Emulator </h2>
+
+  <h2 class="home-title">UZ80</h2>
+  <ul class="about">
+    <li>
+      <a href="http://cngsoft.no-ip.org/uz80.htm"> Main Site </a>
+    </li>
+  </ul>
   
-  
-  <h3 class="home-title">RASM User Manual & source</h3>
-  <ul>
-    <li> <a href="https://github.com/sikorama/rasm-doc/blob/master/pdf/rasm_fr.pdf" target="_blank">Documentation de RASM en Français (PDF)</a></li>
-    <li> <a href="https://github.com/sikorama/rasm-doc/blob/master/pdf/rasm_en.pdf" target="_blank">RASM Documentation in English (PDF)</a></li>
-    <li> <a href="https://github.com/EdouardBERGE/rasm">Latest RASM official release</a> </li>
+  <h2 class="home-title">RASM User Manual & source</h2>
+  <ul class="about">
+    <li> <a href="https://github.com/sikorama/rasm-doc/blob/master/pdf/rasm_en.pdf" target="_blank">Alternative Documentation in English (PDF)</a></li>
+    <li> <a href="https://github.com/EdouardBERGE/rasm">Code Repository</a> </li>
   </ul>
 
-  <h3 class="home-title">UZ80</h3>
- 
+  <h2 class="home-title">SJASM</h2>
+  <ul class="about">
+    <li>
+      <a href="https://github.com/Konamiman/Sjasm">Repository</a>
+    </li>
+  </ul>
 
 </template>

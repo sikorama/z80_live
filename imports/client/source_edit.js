@@ -6,7 +6,8 @@ import { Template } from 'meteor/templating';
 import { checkUserRole } from '../api/roles.js';
 import { SourceAsm, SourceBuilds } from '../api/sourceAsm.js';
 import './source_edit.html';
-import { dev_log, getParentId, updateHeight, setHeight } from './globals.js';
+import { getParentId, updateHeight, setHeight } from './globals.js';
+import {Log} from 'meteor/logging';
 
 let curByteCode = "";
 
@@ -44,7 +45,6 @@ Template.SourceEdit.onRendered(function () {
     let sid = FlowRouter.getParam('sourceId');
 
     let handle = Meteor.setInterval(() => {
-      console.error('timet', handle);
       if (setHeight()) {
         Meteor.clearTimeout(handle);
       }
@@ -68,6 +68,8 @@ Template.SourceEdit.onCreated(function () {
 
     let sid = FlowRouter.getParam('sourceId');
 
+    
+
     // TODO: Only Subscribe to current builds
     this.subscribe('sourceBuilds');
 
@@ -77,6 +79,10 @@ Template.SourceEdit.onCreated(function () {
 
       this.subscribe('sourceAsm', sid, function () {
         let res = SourceAsm.findOne(sid);
+        // Search using slugname
+        //if (!res)
+        //  res = SourceAsm.findOne({name: sid});
+
         if (res) {
           Session.set('buildSettings', res.buildOptions);
           Session.set("srcFromDB", true);
@@ -88,6 +94,16 @@ Template.SourceEdit.onCreated(function () {
           FlowRouter.go('/');
         }
       });
+    }
+    else {
+      // if there is a slug name, try to find corresponding source
+      const slugname = FlowRouter.getQueryParam('name');
+      if (slugname) {
+        Meteor.call('getSourceIdFromSlugName', slugname, (err,res)=> {
+          if (res) 
+            FlowRouter.go('/edit/'+res);
+        });
+      }
     }
   });
 
@@ -114,7 +130,7 @@ Template.SourceEdit.helpers({
   isOwner() {
     const tid = FlowRouter.getParam('sourceId');
     if (tid) {
-      res = SourceAsm.findOne(tid);
+      const res = SourceAsm.findOne(tid);
       if (res)
         if (res.owner === Meteor.userId()) return true;
     }
@@ -125,7 +141,7 @@ Template.SourceEdit.helpers({
     if (checkUserRole(['admin'])) return true;
     const tid = FlowRouter.getParam('sourceId');
     if (tid) {
-      res = SourceAsm.findOne(tid);
+      const res = SourceAsm.findOne(tid);
       if (res)
         if (res.owner === Meteor.userId()) return true;
     }
@@ -145,7 +161,7 @@ Template.SourceEdit.helpers({
             return CodeMirror.Pass;
           }
           const spacesPerTab = cm.getOption('indentUnit');
-          console.error(spacesPerTab);
+          Log.error(spacesPerTab);
           const spacesToInsert = spacesPerTab - (cm.doc.getCursor("start").ch % spacesPerTab);
           const spaces = Array(spacesToInsert + 1).join(' ');
           cm.replaceSelection(spaces, 'end', '+input');
@@ -167,7 +183,7 @@ Template.SourceEdit.helpers({
       }
     }
     catch (e) {
-      console.error(e);
+      Log.error(e);
       return 'http://';
     }
   },
@@ -294,7 +310,7 @@ function assemble(sourceId) {
       if (src)
         code = src.code;
       else {
-        //console.error('No source code available');
+        //Log.error('No source code available');
         return;
       }
     }
@@ -304,7 +320,7 @@ function assemble(sourceId) {
     }
 
     if (!code) {
-      //console.error("Assemble: no code!");
+      //Log.error("Assemble: no code!");
       return;
     }
 
@@ -321,13 +337,13 @@ function assemble(sourceId) {
     // Marcherait pour le code deja en base, mais pas en cours d'edition
 
     Meteor.call('assemble', code, settings, function (err, data) {
-      if (err) console.error('Assemble error: ', err);
+      if (err) Log.error('Assemble error: ', err);
 
       Session.set('curBuildSession', data);
       Session.set('displayEmu', true);
     });
   } catch (e) {
-    console.error(e.stack);
+    Log.error(e.stack);
   }
 }
 
@@ -336,7 +352,7 @@ function updateSource(srcId) {
   // Check source chode has changed
   if (Session.equals('srcChanged', true)) {
     // Retrieve the doc
-    doc = SourceAsm.findOne(srcId);
+    const doc = SourceAsm.findOne(srcId);
     if (doc) {
       //Get modified code (in editor) 
       let ncode = getSource();
@@ -453,7 +469,7 @@ Template.SourceEdit.events({
     // Récuperer des reglages courants => a faire dans le modal
     //    let doc = { buildOptions: Session.get('buildSettings') };
     // Inserer l'id du doc courant si existant
-    doc = { 'mode': 'build' };
+    const doc = { 'mode': 'build' };
     let sid = FlowRouter.getParam('sourceId');
     if (sid)
       doc.id = sid;
@@ -497,7 +513,7 @@ Template.SourceEdit.events({
     if (p) {
       let l = parseInt(p[0].slice(1, -1));
       l -= 1;
-      let d = CodeMirrors.source;
+      let d = CodeMirror.source;
       d.focus();
       d.setCursor({ line: l, ch: 0 });
     }
