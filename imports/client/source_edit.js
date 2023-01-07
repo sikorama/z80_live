@@ -364,6 +364,12 @@ function updateSource(srcId) {
 }
 
 Template.SourceEdit.events({
+  "mouseenter #emulator": function(event) {
+    let el = document.getElementById("emuembed");
+    //console.info('Set focus to ',el);
+    if (el)
+      el.focus();
+  },
   "click .toggleShowResult": function (event) {
     Session.set('showAsmOutput', !Session.get('showAsmOutput'));
   },

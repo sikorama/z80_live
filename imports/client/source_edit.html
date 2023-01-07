@@ -65,7 +65,7 @@
     <!-- Emulator panel -->
     <div class="dashboard-cell pure-u-1 pure-u-sm-1 pure-u-md-1-2 pure-u-lg-1-2">
       <div class="dashboard-incell dashboard-center-text">
-        <fieldset>
+        <fieldset  id="emulator" name="emul">
           <legend>
             <h1 class="home-title">Emulation</h1>
           </legend>
@@ -74,7 +74,7 @@
 
           {{#let emuf = emufile}}
           {{#if emuf}}
-          <embed width=100%; height=400px; src="{{turl}}?file={{emuf.cmd}}{{options}}">
+          <embed  id="emuembed" width=100%; height=400px; src="{{turl}}?file={{emuf.cmd}}{{options}}">
           
             <a href="{{turl}}?file={{emuf.cmd}}{{options}}" target="TinyCPC">
               <button id="tiny" title="Open a fullscreen emulator page, allowing interaction
