@@ -3,8 +3,7 @@ import { Session } from 'meteor/session';
 import { checkUserRole } from '../api/roles';
 import { SourceAsm } from '../api/sourceAsm.js';
 import { Schemas } from './schemas.js';
-import { Log } from 'meteor/logging';
-import CodeMirror from 'codemirror';
+//import CodeMirror from 'codemirror';
 
 Template.registerHelper(
   'userHasMultipleGroups', function () {
@@ -106,7 +105,7 @@ Template.registerHelper('FormatDay', function (date) {
 
 // --------------------- Gestion des formulaires -------------------------
 
-Template.registerHelper('schemas', ()=> Schemas);
+Template.registerHelper('schemas', () => Schemas);
 
 
 // Stringify simple pou rafficher des objets directement dans le html
@@ -134,7 +133,7 @@ export function addEvent(object, type, callback, disable) {
     } else if (object.attachEvent) {
       meth = 'attachEvent';
       if (disable === true)
-        Log.error("Remove attachEvent not implemented");
+        console.error("Remove attachEvent not implemented");
       else
         object.attachEvent("on" + type, callback);
     } else {
@@ -145,30 +144,42 @@ export function addEvent(object, type, callback, disable) {
         object["on" + type] = callback;
     }
   } catch (e) {
-    Log.error(e.stack);
+    console.error(e.stack);
   }
   if (meth != "")
-    Log.warn("addEvent - non standard method", meth, object, type);
+    console.warn("addEvent - non standard method", meth, object, type);
 }
 
 function setElementHeight(elclass, elbotclass, botheight) {
-  let delta = 0;
-  if (elbotclass) {
-    let sc = document.getElementsByClassName(elbotclass)[0];
-    if (sc) {
-      delta = botheight;
+
+  try {
+
+    let delta = 0;
+    if (elbotclass) {
+      let sc = document.getElementsByClassName(elbotclass)[0];
+      if (sc) {
+        delta = botheight;
+      }
+    }
+
+    if (botheight) delta = botheight;
+    //console.debug('setElementHeight ' + elbotclass + ' delta=' + delta);
+
+    let scrollable = document.getElementsByClassName(elclass);
+    //console.debug('scrollable ' + elclass + ' ' + scrollable.length + ' element found');
+
+    if (scrollable.length > 0) {
+      for (let i = 0; i < scrollable.length; i++) {
+        let el = scrollable[i];
+        let from_top = el.getBoundingClientRect().top;
+        let h = window.innerHeight - from_top - delta + 'px';
+        el.style.height = h;
+        //console.debug('element ' + el + ' set height ' + h);
+      }
     }
   }
-
-  if (botheight) delta = botheight;
-
-  let scrollable = document.getElementsByClassName(elclass);
-  if (scrollable.length > 0) {
-    for (let i = 0; i < scrollable.length; i++) {
-      let el = scrollable[i];
-      let from_top = el.getBoundingClientRect().top;
-      el.style.height = window.innerHeight - from_top - delta + 'px';
-    }
+  catch (e) {
+    console.error(e);
   }
 }
 
@@ -176,23 +187,36 @@ function setElementHeight(elclass, elbotclass, botheight) {
 // Applique le calcul de la hauteur pour un ensemble d'elements repérés par leur classe
 // Permet de gerer proprement les scroll bars.
 export function setHeight() {
-  setElementHeight('scrollable-panel');
-  setElementHeight('scrollable-build-panel', null, 50);
-  setElementHeight('scrollable-form', 'scrollable-form-status', 32);
-  setElementHeight('scrollable-search', 'scrollable-search-status', 24);
+  try {
 
-  // Code Mirror Editor
-  let textArea = document.getElementById('source');
-  if (textArea) {
-    let cm = CodeMirror.source;
-    let from_top = textArea.getBoundingClientRect().top;
-    let newh = '' + (window.innerHeight - from_top - 200) + 'px';
-    Log.debug('From top='+from_top+' Inner Height='+ window.innerHeight + '=>' + newh);
-    if (cm)
-      cm.setSize(null, newh);
+    setElementHeight('scrollable-panel');
+    setElementHeight('scrollable-build-panel', null, 50);
+    setElementHeight('scrollable-form', 'scrollable-form-status', 32);
+    setElementHeight('scrollable-search', 'scrollable-search-status', 24);
+
+    // Code Mirror Editor
+    let textArea = document.getElementById('source');
+    if (textArea) {
+      //console.debug('textArea:'+textArea);
+      let cm = CodeMirrors.source;
+      if (cm) {
+        let from_top = textArea.getBoundingClientRect().top;
+        let newh = '' + (window.innerHeight - from_top - 200) + 'px';
+        cm.setSize(null, newh);
+        //console.debug('cm found, From top=' + from_top + ' Inner Height=' + window.innerHeight + '=>' + newh);
+        return true;
+      }
+
+    }
+    else {
+      console.debug('No text area found');
+    }
+  }
+  catch (e) {
+    //console.error('setHeight exception');
+    console.error(e.stack);
     return true;
   }
-
   // Couldn't get textArea, return false
   return false;
 
@@ -262,10 +286,10 @@ export function updateRouteTableSort(id) {
  */
 export function getRouteTableSortObj(def) {
   let o = getRouteTableSort(def);
-  let so= {};
+  let so = {};
   let k = Object.keys(o)[0];
-  k.split(",").forEach((f)=> {so[f] = o[k];});
-  return so;  
+  k.split(",").forEach((f) => { so[f] = o[k]; });
+  return so;
 }
 
 // Recursive search of id property in htlm elements, in DOM

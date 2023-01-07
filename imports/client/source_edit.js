@@ -43,9 +43,10 @@ Template.SourceEdit.onRendered(function () {
   this.autorun(() => {
 
     let sid = FlowRouter.getParam('sourceId');
-
+    let cnt=0;
     let handle = Meteor.setInterval(() => {
-      if (setHeight()) {
+      cnt+=1;
+      if (setHeight() || cnt==10) {
         Meteor.clearTimeout(handle);
       }
     }, 500);
