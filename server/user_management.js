@@ -7,7 +7,8 @@ import { role_exists } from '../imports/api/roles';
 import { SourceGroups } from '../imports/api/sourceAsm.js';
 import { Log } from 'meteor/logging';
 import { assertMethodAccess,args } from './utils';
-
+import { Roles } from 'meteor/alanning:roles';
+   
 //Renvoie vrai si l'utilisateur a un role donnée
 //Par défaut les superadmins on tous les roles
 //Mais pour certains tests, on ne veut pas bypasser le test

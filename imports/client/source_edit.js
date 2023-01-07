@@ -62,6 +62,7 @@ Template.SourceEdit.onCreated(function () {
   Session.set("srcFromDB", false);
   Session.set("srcChanged", false);
   Session.setDefault('showAsmOutput', false);
+  Session.set('buildSettings', {});
 
   // Autorun, so if we fork, we can subscribe to the new source
   this.autorun(() => {
@@ -161,7 +162,7 @@ Template.SourceEdit.helpers({
             return CodeMirror.Pass;
           }
           const spacesPerTab = cm.getOption('indentUnit');
-          Log.error(spacesPerTab);
+          //Log.error(spacesPerTab);
           const spacesToInsert = spacesPerTab - (cm.doc.getCursor("start").ch % spacesPerTab);
           const spaces = Array(spacesToInsert + 1).join(' ');
           cm.replaceSelection(spaces, 'end', '+input');
@@ -172,11 +173,10 @@ Template.SourceEdit.helpers({
   // get tiny 8 bit URL (CPC or ZX)
   turl() {
     try {
-      let bset = Session.get('buildSettings');
-      if (bset.buildmode === 'z80') {
+      const bset = Session.get('buildSettings') || {};
+      if (bset.buildmode === 'zx80') {
         return Session.get('tinyZXURL');
       }
-
       else {
         // cpc
         return Session.get('tinyCPCURL');
@@ -184,7 +184,7 @@ Template.SourceEdit.helpers({
     }
     catch (e) {
       Log.error(e);
-      return 'http://';
+      return '/logo.webp';
     }
   },
   emuoptions() {

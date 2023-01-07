@@ -106,7 +106,7 @@ Template.registerHelper('FormatDay', function (date) {
 
 // --------------------- Gestion des formulaires -------------------------
 
-Template.registerHelper('schemas', Schemas);
+Template.registerHelper('schemas', ()=> Schemas);
 
 
 // Stringify simple pou rafficher des objets directement dans le html
@@ -198,7 +198,7 @@ export function setHeight() {
 
 }
 
-exports.updateHeight = _.debounce(setHeight, 500);
+export const updateHeight = _.debounce(setHeight, 500);
 
 Template.registerHelper(
   'userGroupList',
@@ -221,7 +221,7 @@ function getRouteSortVar() {
 }
 
 // Get internal sort object (may contain compound field names)
-function getRouteTableSort(def) {
+export function getRouteTableSort(def) {
   let p = getRouteSortVar();
   let v = Session.get(p);
   if (v === undefined) return def;

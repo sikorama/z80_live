@@ -3,14 +3,6 @@ import {
   Session
 } from 'meteor/session';
 
-FlowRouter.route('/login', {
-  action: function(params, queryParams) {
-    BlazeLayout.render('Page', {
-       main: 'LoginForm'
-     });
-   }
-});
-
 FlowRouter.notFound = {
   action: function() {
     FlowRouter.go("/browse");

@@ -13,13 +13,6 @@ Template.Page.onRendered(function () {
 
 });
 
-Template.LoginForm.onRendered(function () {
-  Tracker.autorun(function () {
-    if (Meteor.userId()) {
-      FlowRouter.go('/browse');
-    }
-  });
-});
 
 Template.Page.helpers({
   notifications: function () {
