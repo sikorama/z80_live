@@ -42,7 +42,7 @@ function defaultParams() {
   // Settings du serveur
   initParam('Name', 'Z80Live Live', 'Server name');
   initParam('URL', 'https://z80live.amstrad.info', 'Server URL');
-  initParam('version', '0.30', 'Version number', true);
+  initParam('version', '0.40', 'Version number', true);
   initParam('buildServerURL', '127.0.0.1','Private URL for assembling server');
   initParam('buildServerPort', '8000', 'Assembling server port');
   initParam('fileServerURL', 'z80build.amstrad.info','URL pour le serveur de fichiers (public)');
@@ -50,6 +50,7 @@ function defaultParams() {
   initParam('tinyCPCURL_UI', 'z80live.amstrad.info/tiny8bit/cpc-ui.html','Public URL for Tiny CPC (UI version)');
   initParam('tinyZXURL', 'z80live.amstrad.info/tiny8bit/zx.html','Public URL for Tiny ZX');
   initParam('tinyZXURL_UI', 'z80live.amstrad.info/tiny8bit/zx-ui.html','Public URL for Tiny ZX (UI version)');
+  initParam('msxURL', 'https://webmsx.org/','Public URL for MSX emulator');
   initParam('rocketIP', '', 'Rocket chat for notification'); 
   initParam('rocketToken', '', 'Token for rocket chat notification');
   initParam('rocketNotifStart', false, 'Notify server start');

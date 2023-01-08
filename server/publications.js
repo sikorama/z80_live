@@ -17,6 +17,7 @@ import { SourceAsm, SourceBuilds, SourceGroups, UserRatings } from '../imports/a
 import { sendNotifRocket } from './notifications.js';
 import { getUserGroups, isAdmin } from './user_management.js';
 import { Log } from 'meteor/logging';
+import { args } from './utils.js';
 
 
 // All Publications Declarations
@@ -138,6 +139,8 @@ export function init_publications() {
 
   SourceAsm.before.insert(function (userid, doc) {
     doc.timestamp = Date.now();
+    //Log.info('before insert '+doc.name);
+      
   });
 
   SourceAsm.before.update(function (userid, doc, fieldNames, modifier, options) {    
@@ -150,6 +153,29 @@ export function init_publications() {
         modifier.$unset.owner = undefined;
     }
   });
+
+  /**
+   * 
+   * @param {string} name 
+   */
+  // Should check if slug name already exists or not
+  function gen_slugname(name) {
+    return name.toLowerCase().replace(' ','-');
+  }
+
+  SourceAsm.find().observe({
+    added: function(doc) {
+      const sname =gen_slugname(doc.name);
+      Log.info(args('Added',doc.name,"=>",sname));
+      SourceAsm.update(doc._id, {$set: {slugname: sname}});
+    },
+    changed: function(doc,old) {
+      const sname =gen_slugname(doc.name);
+      Log.info(args('Changed',doc.name,"=>",sname));
+      SourceAsm.update(doc._id, {$set: {slugname: sname}});
+    }
+  })
+
 
   // DB des builds
   Meteor.publish('sourceBuilds', function () {
@@ -311,6 +337,8 @@ Meteor.methods({
     let s = SourceAsm.findOne({slugname:slugname});
     if (!s)
       s = SourceAsm.findOne({name:slugname});
-    return s;
+    Log.info(args('Looking for source with slugname',slugname,'=>',s?._id));
+ 
+    return s?._id;
   }
   });
