@@ -163,7 +163,8 @@ export function init_publications() {
     return name.toLowerCase().replace(' ','-');
   }
 
-  SourceAsm.find().observe({
+  // For missing slug names
+  SourceAsm.find({slugname: {$exists:false}}).observe({
     added: function(doc) {
       const sname =gen_slugname(doc.name);
       Log.info(args('Added',doc.name,"=>",sname));

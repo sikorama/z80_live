@@ -69,9 +69,6 @@ Template.SourceEdit.onCreated(function () {
   this.autorun(() => {
 
     let sid = FlowRouter.getParam('sourceId');
-
-    
-
     // TODO: Only Subscribe to current builds
     this.subscribe('sourceBuilds');
 
@@ -97,7 +94,7 @@ Template.SourceEdit.onCreated(function () {
         }
       });
     }
-    else {
+/*    else {
       // if there is a slug name, try to find corresponding source
       const slugname = FlowRouter.getQueryParam('name');
       if (slugname) {
@@ -106,7 +103,7 @@ Template.SourceEdit.onCreated(function () {
             FlowRouter.go('/edit/'+res);
         });
       }
-    }
+    }*/
   });
 
   // debounce?
