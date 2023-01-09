@@ -1,0 +1,45 @@
+
+.notif{
+    position:fixed;
+    top:0;
+    left:0;
+    min-height:60px;
+    line-height:60px;
+    width:100%;
+    z-index:1000;
+    text-align:center;
+    font-size:18px;color:#fff;
+    background: rgba(0, 0, 0, 0.8);
+    opacity:0.9;
+    animation: notif-move 1s;
+}
+
+.notif-anim{
+   animation: notif-fade 1s;
+}
+
+.notif .alert{background-color: rgba(246, 71, 71, 0.7); 	 }
+.notif .error{background-color: rgba(0, 0, 240, 0.7); 	 }
+.notif .connect{background-color: rgba(0, 240, 0, 0.7); 	 }
+.notif .disconnect{background-color: rgba(220, 120, 120, 0.7); 	 }
+.notif .good{background-color: rgba(0, 240, 0, 0.7); 	 }
+
+.online{
+   width:100%;
+}
+
+.align-right{
+   float:right;
+}
+
+
+@keyframes notif-fade {
+   from { opacity: 0; }
+   to { opacity:0.9; }
+}
+@keyframes notif-move {
+   from { top: -10px; }
+   to {  }
+}
+
+

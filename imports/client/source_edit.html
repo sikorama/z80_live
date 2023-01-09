@@ -1,34 +1,68 @@
 <!-- Vue avec les infos complete sur une fiche residence. -->
 <template name="SourceEdit">
+  {{#if Template.subscriptionsReady}}
+
+  {{#let code=getCode}}
+
   <div class="pure-g">
-    {{#if Template.subscriptionsReady}}
-    {{#let code=getCode}}
+    <div class="pure-u-1-4">
+    </div>
+    <div class="pure-u-1-2 centered">
+   
+      <h1 class="home-title centered">
+        <span title="Build Settings" class="buildsettings">&#x2699;</span>
+
+      {{#if code._id}}
+      <span title="{{code.name}} by {{code.author}} {{code.desc}}
+{{#if canEdit}}Click here to change source name, group, description...{{/if}}" class="filesettings">
+        {{code.name}}
+      </span>
+
+      {{#if currentUser}}
+        {{>Stars id=code._id}}
+      {{/if}}
+
+      {{else}}
+      {{/if}}
+      </h1>
+</div>
+</div>
+
+  <div class="pure-g">
     <div class="dashboard-cell pure-u-1 pure-u-sm-1 pure-u-md-1-2 pure-u-lg-1-2" height="10px">
       <div class="dashboard-incell dashboard-center-text">
         <section class="">
           <fieldset>
             <legend>
-              <h1 class="home-title">
-                <span title="Build Settings" class="buildsettings">&#x2699;</span>
+              <h2 class="home-title">
+<!--
 
-                {{#if code._id}}
+  <span title="Build Settings" class="buildsettings">&#x2699;</span>
+  
+  {{#if code._id}}
                 <span title="{{code.name}} by {{code.author}} {{code.desc}}
-{{#if canEdit}}Click here to change source name, group, description...{{/if}}" class="filesettings">
-                  {{code.name}}
+                {{#if canEdit}}Click here to change source name, group, description...{{/if}}" class="filesettings">
+                {{code.name}}
                 </span>
-
-                <!-- Vote is only for other people source code -->
+                
                 {{#if currentUser}}
                 {{>Stars id=code._id}}
                 {{/if}}
-
+                
                 {{else}}
-
+                
+              -->
                 Source Code
+              <!--
+
                 {{/if}}
+              -->
                 <!-- &#x2710; &#x2699; &#x22D9; &#x22EF; &#x21b3;-->
-              </h1>
+              </h2>
             </legend>
+
+
+
             {{>CodeMirror id="source" name="someName" options=editorOptions code=code.code}}
           </fieldset>
         </section>
@@ -67,7 +101,7 @@
       <div class="dashboard-incell dashboard-center-text">
         <fieldset  id="emulator" name="emul">
           <legend>
-            <h1 class="home-title">Emulation</h1>
+            <h2 class="home-title">Emulation</h2>
           </legend>
 
           {{#if sessionVarTrue "displayEmu"}}
@@ -128,10 +162,10 @@
         {{/let}}
       </div>
     </div>
-    {{/let}}
-    {{/if}}
+   
   </div>
-
+  {{/let}}
+  {{/if}}
 
 </template>
 

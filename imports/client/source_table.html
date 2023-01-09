@@ -82,18 +82,30 @@
 
 <!-- Main page, root element -->
 <template name="TablesPage">
+  <div class="top-padding"></div>
+
   <section class="center-content">
     <div class="pure-g">
       <!-- Panel des Filtres -->
+<!-- admin uniquement?
       <div class="pure-u-1-6 pure-u-xl-1-8">
         {{>searchArea}}
         {{>SourceSelect}}
       </div>
-
-      <!-- Center content (Tables)-->
       <div class="pure-u-5-6 pure-u-xl-7-8">
         {{>  SourceTable}}
       </div>
+-->
+      <div class="pure-u-1-12">
+      </div>
+
+      <div class="pure-u-5-6">
+        {{>searchArea}}
+        {{>SourceTable}}
+      </div>
+      <div class="pure-u-1-12">
+      </div>
+
     </div>
   </section>
 </template>

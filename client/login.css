@@ -1,0 +1,34 @@
+
+.login-form {
+	white-space: normal;
+}
+
+/* chrome hack */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+}
+
+.login-container input[type=text],
+.login-container input[type=password]{
+	border-radius: 3px;
+	border: solid 1px #dfe3ea;
+	padding: 0 10px;
+	background: #ffffff;
+}
+.login-container .at-input + .at-input{
+	margin-top: 15px;
+}
+.login-container .at-error{
+	color: #DF4A5D;
+	font-weight: 600;
+}
+.login-container fieldset{
+	border: none;
+}
+.login-container .at-pwd-link p{
+	text-align: center;
+	font-size: 12px;
+}
+.login-container a{
+	color: #99a5b7;
+}
