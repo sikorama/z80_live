@@ -13,3 +13,9 @@
   word-break: break-all;
   font-size: 14px;
 }
+
+
+.CodeMirror-linenumber {
+  min-width: 30px;
+  text-align: left;
+}

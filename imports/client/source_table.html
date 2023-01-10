@@ -48,8 +48,10 @@
     </div>
     <div class="scrollable-search-status">
       {{#if Template.subscriptionsReady}}
-      {{displayCount search_sources.count}}
-      {{/if}}
+       {{displayCount search_sources.count}}
+       {{>searchArea}}
+     
+       {{/if}}
     </div>
   </div>
 </template>
@@ -80,6 +82,9 @@
   </tr>
 </template>
 
+
+
+
 <!-- Main page, root element -->
 <template name="TablesPage">
   <div class="top-padding"></div>
@@ -104,6 +109,9 @@
         {{>SourceTable}}
       </div>
       <div class="pure-u-1-12">
+<!--
+  <button title="Create a new source code" id="newbtn" class="updatebtn pure-button pure-button-primary">+</button>
+-->
       </div>
 
     </div>

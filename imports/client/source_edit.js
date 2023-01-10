@@ -517,7 +517,7 @@ Template.SourceEdit.events({
     if (p) {
       let l = parseInt(p[0].slice(1, -1));
       l -= 1;
-      let d = CodeMirror.source;
+      let d = CodeMirrors.source;
       d.focus();
       d.setCursor({ line: l, ch: 0 });
     }
