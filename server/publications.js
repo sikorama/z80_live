@@ -23,7 +23,7 @@ import { args } from './utils.js';
 // All Publications Declarations
 export function init_publications() {
   Meteor.methods({
-    // Create a new source, with default values
+    // Create a new source, with default values (if missing)
     // Returns the new id, after insertion
     insertSource: function (doc) {
       //Log.error('insertSource', doc);
@@ -46,8 +46,14 @@ export function init_publications() {
         // Default name
         if (!doc.name) doc.name = 'program' + (SourceAsm.find().count() + 1);
 
+        doc.buildOptions =  doc.buildOptions|| {};
+        if (!doc.buildOptions.assembler)
+          doc.buildOptions.assembler='sjasmplus';
+        if (!doc.buildOptions.buildmode)
+          doc.buildOptions.buildmode='sna';
+        
         // ??
-        if (doc.buildOptions)
+        if (doc.buildOptions) 
           if (doc.buildOptions.buildmode == "lib")
             doc.buildOptions.filename = doc.name;
 

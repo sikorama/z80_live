@@ -34,8 +34,11 @@
       buttonContent="update"
       class="pure-form pure-form-stacked addForm1"}}
 
+      build settings= {{build_settings}}
+
       {{#if build_settings}}
         {{> afQuickFields fields="buildOptions.buildmode"}}
+        {{> afQuickFields fields="buildOptions.assembler"}}
 
         {{#unless afFieldValueIs name="buildOptions.buildmode" value="lib"}}
         {{> afQuickFields fields="buildOptions.entryPoint"}}
@@ -49,8 +52,8 @@
         {{> afQuickFields fields="buildOptions.command,buildOptions.startPoint,buildOptions.endPoint"}}
         {{/if}}
 
-
       {{else}}
+        <!-- file author/owner/group..-->
         {{> afQuickFields fields="name"}}
         {{> afQuickField name="group" options=userGroupList defaultValue="public"}}
         {{> afQuickFields fields="author,desc,cat"}}

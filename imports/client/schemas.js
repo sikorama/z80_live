@@ -1,6 +1,6 @@
 import SimpleSchema from 'simpl-schema';
 
-import {Tracker} from 'meteor/tracker';
+import { Tracker } from 'meteor/tracker';
 
 // Pour ajouter des options 'autoform' au schema
 SimpleSchema.extendOptions(['autoform']);
@@ -29,10 +29,17 @@ Schemas.ForcePassword = new SimpleSchema({
 Schemas.BuildSettings = new SimpleSchema({
   buildmode: {
     type: String,
-    label: 'Build Mode',
+    label: 'Target',
     optional: false,
     defaultValue: 'sna',
-    allowedValues: ["raw", "sna","dsk","z80"] //,'lib'],
+    allowedValues: ["sna", "dsk", "sna_zx48", "sna_zx128", 'tap'] //,'lib'],
+  },
+  assembler: {
+    type: String,
+    label: 'Assembler',
+    optional: false,
+    defaultValue: 'sjasmplus', // default value depends on the arch
+    allowedValues: ["sjasmplus", "rasm", "uz80"]
   },
   entryPoint: {
     type: String,
@@ -100,7 +107,7 @@ Schemas.Users = new SimpleSchema({
   },
   'roles.$': {
     type: String,
-    allowedValues: [ "admin","editor"],
+    allowedValues: ["admin", "editor"],
   },
   groups: {
     label: 'Groups',
@@ -115,7 +122,8 @@ Schemas.Users = new SimpleSchema({
   'groups.$': {
     type: String
   },
-},{ tracker: Tracker });
+
+}, { tracker: Tracker });
 
 
 
@@ -177,4 +185,11 @@ Schemas.SourceCode = new SimpleSchema({
     label: 'Build Options',
     optional: true
   },
-},{ tracker: Tracker });
+  emulator: {
+    type: String,
+    label: 'Emulator',
+    optional: false,
+    defaultValue: 'Tiny8bit',
+    allowedValues: ["Tiny8bit"] //,'lib'], 
+  }
+}, { tracker: Tracker });
