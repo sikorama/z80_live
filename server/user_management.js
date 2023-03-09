@@ -8,6 +8,8 @@ import { SourceGroups } from '../imports/api/sourceAsm.js';
 import { Log } from 'meteor/logging';
 import { assertMethodAccess,args } from './utils';
 import { Roles } from 'meteor/alanning:roles';
+import { Random } from 'meteor/random';
+
    
 //Renvoie vrai si l'utilisateur a un role donnée
 //Par défaut les superadmins on tous les roles
@@ -19,14 +21,14 @@ import { Roles } from 'meteor/alanning:roles';
 Meteor.methods({
   'migrate1': function() {
     try {
-      Package['alanning:roles'].Roles._forwardMigrate()
+      Package['alanning:roles'].Roles._forwardMigrate();
     } catch(e) {
       Log.error(e.stack);
     }
   },
   'migrate2': function() {
     try {
-      Package['alanning:roles'].Roles._forwardMigrate2()
+      Package['alanning:roles'].Roles._forwardMigrate2();
     } catch(e) {
       Log.error(e.stack);
     }
@@ -164,7 +166,9 @@ export function addUser(doc) {
   if (u) {
     Log.info(args("User", doc.username, 'already exists!', u._id));
     id = u._id;
-//    return;
+
+
+    //    return;
   }
   else 
   {
@@ -179,6 +183,7 @@ export function addUser(doc) {
     
   }
 
+  // Update group
   SourceGroups.upsert({ name: doc.username },  { $set: {desc: 'Private group for ' + doc.username }});
 
   setUserGroups(id, doc.groups);
@@ -198,8 +203,19 @@ function createDefaultAccounts() {
     });
   }
 
-//  if (Meteor.users.find().count()===0)
-  qaddUser('admin', 'admin@z80.amstrad.info', 'password', ['admin', 'superadmin'], ['public']);
+// Check if there is an admin account
+const u = Meteor.users.findOne({'username': 'admin'});
+if (!u) {
+  Log.info('Generating admin account');
+  let adminpassword = process.env.ADMIN_PASSWORD;
+  if (!adminpassword) {
+    adminpassword = Random.secret();
+    Log.info('Generated temporary admin password:', adminpassword);
+  }
+  
+  qaddUser('admin', 'admin@z80.amstrad.info', adminpassword, ['admin', 'superadmin'], ['public']);
+}
+
 }
 
 

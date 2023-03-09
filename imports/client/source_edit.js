@@ -25,7 +25,7 @@ Template.registerHelper('getCode', function () {
   if (!res) {
     res = {
       name: 'Source Code',
-      code: ';Sample Test\nloop:\n LD A,R\n AND 31\n OR #40\n ld bc, #7f10\n Out (c),c\n out (c),a\n jr loop\n',
+      code: ';Sample Test\nloop:\n ld A,R\n and 31\n or #40\n ld BC, #7f10\n out (c),c\n out (c),a\n jr loop\n',
       buildOptions: { buildmode: 'sna' }
     };
   }
