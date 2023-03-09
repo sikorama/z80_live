@@ -201,7 +201,11 @@ export function setHeight() {
       let cm = CodeMirrors.source;
       if (cm) {
         let from_top = textArea.getBoundingClientRect().top;
-        let newh = '' + (window.innerHeight - from_top - 264) + 'px';
+        let buttonmargin=214;
+        if (Meteor.userId()) 
+            buttonmargin=264;
+
+        let newh = '' + (window.innerHeight - from_top - buttonmargin) + 'px';
         cm.setSize(null, newh);
         console.debug('cm found, From top=' + from_top + ' Inner Height=' + window.innerHeight + '=>' + newh);
         return true;

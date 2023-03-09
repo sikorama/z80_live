@@ -172,7 +172,8 @@ Template.SourceEdit.helpers({
   turl() {
     try {
       const bset = Session.get('buildSettings') || {};
-      if (bset.buildmode === 'zx80') {
+      const zxarch=['sna_zx48', 'sna_zx128', 'tap'];
+      if (zxarch.indexOf(bset.buildmode)>=0) {
         return Session.get('tinyZXURL');
       }
       else {
@@ -187,13 +188,16 @@ Template.SourceEdit.helpers({
   },
   emuoptions() {
     let bset = Session.get('buildSettings');
-    if (bset.buildmode === 'z80') {
-      return "joystick=kempston&type=zx48k";
+    switch(bset) {
+      case 'sna_zx48':
+      case 'tap':
+          return "joystick=kempston&type=zx48k";
+      case 'sna_zx128':
+        return "joystick=kempston&type=zx128k";
+      default:
+        return '&joystick=true';
     }
-    else {
-      // cpc
-      return '&joystick=true';
-    }
+
   },
   // Get File URL
   emufile() {
@@ -211,7 +215,7 @@ Template.SourceEdit.helpers({
         res = url + '/' + sb.output;
       }
       else // pas de session de build associée
-        return undefined; //(url + '/' + 'Jedi.sna');
+        return undefined; 
     } else {
 
       // On utilise le source pour retrouver la session de build
@@ -241,7 +245,7 @@ Template.SourceEdit.helpers({
     let cmd = res;
     if (bset)
       if (bset.command)
-        cmd += '&input=' + bset.command + '%0A';
+        cmd += '&input=' + bset.command + '%0A'; // use uriencode
 
     return ({ file: res, cmd: cmd });
   },
@@ -282,7 +286,8 @@ function getSource() {
 }
 
 /**
- * Reassemble source code. If sourceId is provided, get the code from database, otherwise
+ * Assemble source code. 
+ * If sourceId is provided, get the code from database, otherwise
  * use code in editor
  * @param {String} sourceId : index of source code
  */

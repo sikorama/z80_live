@@ -55,9 +55,10 @@ export function init_assembler() {
 
                 Log.info(args('Assemble settings:', settings));
 
-                // SI on a pas précisé de nom, on utilise l'id de session comme nom de fichier
-                if (!settings.filename) settings.filename = 'temp_' + buildId; // + '.asm';
+                // Generates a filename
+                if (!settings.filename) settings.filename = 'temp_' + buildId; 
 
+                // Ensure there is an asm extension
                 if (!settings.filename.endsWith('.asm'))
                     settings.filename += '.asm';
 
@@ -66,24 +67,22 @@ export function init_assembler() {
 
                 settings.buildmode = settings.buildmode||'sna';
                 settings.assembler = settings.assembler||'rasm';
+
                 
 
-                //TODO: Mettre les ligne supplémentaires  sur une seule ligne
-                // ---------- Remote?
                 switch (settings.buildmode) {
                     case 'lib':
+                        // Libe
                         post_function = '/store';
                         break;
-                    case 'raw':
-                        break;
-                    case 'bin':
+                    // ----------  All this will be removed
+                    /*case 'bin':
                         if (!settings.startPoint)
                             settings.startPoint = "#1000";
                         s0.push('ORG ' + settings.startPoint);
                         //source = source;
-                        break;
+                        break;*/
                     case 'dsk':
-
                         if (!settings.startPoint) {
                             s0.push('ORG #1000');
                             settings.startPoint = "_default_start";
@@ -102,14 +101,13 @@ export function init_assembler() {
                         s1 = '_default_end:\n';
                         s1 = s1 + "SAVE '-RUN.BIN'," + settings.startPoint + ',' + settings.endPoint + '-' + settings.startPoint + ',DSK,' + "'" + settings.filename + ".dsk' \n";
                         break;
-                    default:
-                        settings.buildmode = 'sna';
+                    // default:
+                    //    settings.buildmode = 'sna';
                     // Pas de break ici
                     case 'sna':
-                        // to be removed
-                        if (settings.assembler==='rasm') {
 
-                            
+                    // to be removed
+                        if (settings.assembler==='rasm') {                            
                             if (!settings.startPoint)
                             settings.startPoint = "#1000";
                             console.log('Add header - to be removed');
@@ -127,7 +125,7 @@ export function init_assembler() {
                         }
                         //                        source = s0 + source;
                         break;
-                    case 'zx80':
+                    /*case 'zx80':
                         if (settings.assembler==='rasm') {
                             // ZX80 file
                         // HOBETA?
@@ -144,12 +142,16 @@ export function init_assembler() {
                             s0.push('RUN $,$');
                         }
 
-                        break;
+                        break;*/
                 }
                 s0.push(' ');
                 let hs = s0.join(' : ');
 
+
+
                 Log.info('Header:'+ hs);
+                Log.info(args('Assemble actual settings:', settings));
+
                 source = hs + source + '\n' + s1;
 
                 // Envoi d'un post au serveur de build
@@ -171,7 +173,9 @@ export function init_assembler() {
                 //if (settings.assembler)
                 ///    url_params.push('asm='+settings.assembler);
                 
+                // filename in URL is now deprecated
                 let url = post_function + '/' + settings.filename+'?'+url_params.join('&');
+                Log.info(args('Request:', url));
                 
                 let post_options = {
                     host: host_url,
