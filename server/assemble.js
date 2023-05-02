@@ -99,7 +99,8 @@ export function init_assembler() {
                         s0.push('_default_start:');
 
                         s1 = '_default_end:\n';
-                        s1 = s1 + "SAVE '-RUN.BIN'," + settings.startPoint + ',' + settings.endPoint + '-' + settings.startPoint + ',DSK,' + "'" + settings.filename + ".dsk' \n";
+                        let dskfilename= './output/'+settings.filename.replace('.asm','.dsk');
+                        s1 = s1 + "SAVE '-RUN.BIN'," + settings.startPoint + ',' + settings.endPoint + '-' + settings.startPoint + ',DSK,' + "'" + dskfilename+'\'\n';
                         break;
                     // default:
                     //    settings.buildmode = 'sna';

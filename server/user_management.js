@@ -204,13 +204,20 @@ function createDefaultAccounts() {
   }
 
 // Check if there is an admin account
+//Meteor.users.remove({username:'admin'});
 const u = Meteor.users.findOne({'username': 'admin'});
-if (!u) {
+if (!u) 
+{
   Log.info('Generating admin account');
   let adminpassword = process.env.ADMIN_PASSWORD;
   if (!adminpassword) {
-    adminpassword = Random.secret();
-    Log.info('Generated temporary admin password:', adminpassword);
+    if (Meteor.isDevelopment) {
+      adminpassword='admin';
+    }
+    else {
+      adminpassword = Random.secret();
+    }
+    Log.info(args('Generated temporary admin password:', adminpassword));
   }
   
   qaddUser('admin', 'admin@z80.amstrad.info', adminpassword, ['admin', 'superadmin'], ['public']);
