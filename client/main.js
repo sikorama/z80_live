@@ -41,7 +41,7 @@ Meteor.call('getParam', 'tinyZXURL', function(err,res) {Session.setDefault('tiny
 Meteor.call('getParam', 'tinyZXURL_UI', function(err,res) {Session.setDefault('tinyZXURL_UI', res);});
 
 Session.setDefault('dumpFormat', 'basic');
-Session.setDefault('buildSettings', {buildmode: 'sna'});
+Session.setDefault('buildSettings', {buildmode: 'sna_cpc6128'});
 
 Session.setDefault("sourceSearchTags",[]);  // Liste des tags pour la recherche courante
 Session.setDefault("sourceSearchString",'');

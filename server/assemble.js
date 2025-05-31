@@ -45,13 +45,10 @@ export function init_assembler() {
                     sessionId: sessionId,
                 });
 
-                //Removes weird characters (accents) that may compromise the assembling
-                
+                //sanitize sources
                 source = source.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-                // Ce qui est plus général que:
-                //source = source.replace(/[éèê]/g, 'e');
-
-                let post_function = '/build';
+                //let json_to_send;
+                let post_function = '/api/assemble';
 
                 Log.info(args('Assemble settings:', settings));
 
@@ -65,7 +62,7 @@ export function init_assembler() {
                 let s0 = [];
                 let s1 = '';
 
-                settings.buildmode = settings.buildmode||'sna';
+                settings.buildmode = settings.buildmode||'sna_cpc6128';
                 settings.assembler = settings.assembler||'rasm';
 
                 
@@ -73,7 +70,7 @@ export function init_assembler() {
                 switch (settings.buildmode) {
                     case 'lib':
                         // Libe
-                        post_function = '/store';
+                        post_function = '/api/store';
                         break;
                     // ----------  All this will be removed
                     /*case 'bin':
@@ -99,11 +96,10 @@ export function init_assembler() {
                         s0.push('_default_start:');
 
                         s1 = '_default_end:\n';
-                        let dskfilename= './output/'+settings.filename.replace('.asm','.dsk');
+                        let dskfilename= settings.filename.replace('.asm','.dsk');
                         s1 = s1 + "SAVE '-RUN.BIN'," + settings.startPoint + ',' + settings.endPoint + '-' + settings.startPoint + ',DSK,' + "'" + dskfilename+'\'\n';
                         break;
                     // default:
-                    //    settings.buildmode = 'sna';
                     // Pas de break ici
                     case 'sna':
 
@@ -125,6 +121,8 @@ export function init_assembler() {
                             
                         }
                         //                        source = s0 + source;
+ 
+
                         break;
                     /*case 'zx80':
                         if (settings.assembler==='rasm') {
@@ -158,24 +156,12 @@ export function init_assembler() {
                 // Envoi d'un post au serveur de build
                 let host_url = encodeURIComponent(getParam('buildServerURL'));
                 let rport = getParam('buildServerPort');
-
-                // params
-                //let url_params=[]
-                let url_params=Object.keys(settings).map((k)=> {
-                    // Safize : special chars? base 64 encoding?
-                    // Warning with '&' 
-                    return (k +'='+encodeURIComponent(settings[k]));
-                });
-
-                // to be removed
-                url_params.push('type='+settings.buildmode);
-
-                // to be removed
-                //if (settings.assembler)
-                ///    url_params.push('asm='+settings.assembler);
+      
+                const json_to_send = JSON.stringify({ ...settings, ...{source:source}});
                 
+                console.log(json_to_send);
                 // filename in URL is now deprecated
-                let url = post_function + '/' + settings.filename+'?'+url_params.join('&');
+                let url = post_function + '/' + settings.filename; //+'?'+url_params.join('&');
                 Log.info(args('Request:', url));
                 
                 let post_options = {
@@ -184,10 +170,15 @@ export function init_assembler() {
                     method: 'POST',
                     path: url,
                     headers: {
-                        'Content-Type': 'text/html',
-                        'Content-Length': source.length
+                            'Content-Type': 'application/json',
+                        //    'Content-Length': Buffer.byteLength(json_to_send)
+                        //'Content-Type': 'text/html',
+                        'Content-Length': json_to_send.length
                     }
                 };
+
+                 Log.info(args('Options:', post_options));
+               
 
                 let resp = "";
                 //
@@ -209,6 +200,7 @@ export function init_assembler() {
                             ores.header = s0;
                             ores.footer = s1;
                             ores.duration = ores.duration;
+                            Log.info('result=', ores);
 
                             SourceBuilds.insert(ores);
                         } catch (e) {
@@ -222,7 +214,7 @@ export function init_assembler() {
                         Log.error('POST Request Error:'+ errd);
                     });
 
-                    post_req.write(source);
+                    post_req.write(json_to_send);
                     post_req.end();
                 }
 

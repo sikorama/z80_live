@@ -50,7 +50,7 @@ export function init_publications() {
         if (!doc.buildOptions.assembler)
           doc.buildOptions.assembler='sjasmplus';
         if (!doc.buildOptions.buildmode)
-          doc.buildOptions.buildmode='sna';
+          doc.buildOptions.buildmode='sna_cpc6128';
         
         // ??
         if (doc.buildOptions) 

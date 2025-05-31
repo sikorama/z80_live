@@ -7,7 +7,8 @@ import { checkUserRole } from '../api/roles.js';
 import { SourceAsm, SourceBuilds } from '../api/sourceAsm.js';
 import './source_edit.html';
 import { getParentId, updateHeight, setHeight } from './globals.js';
-import {Log} from 'meteor/logging';
+import { Log } from 'meteor/logging';
+//import './rvmplayer.js';
 
 let curByteCode = "";
 
@@ -26,13 +27,66 @@ Template.registerHelper('getCode', function () {
     res = {
       name: 'Source Code',
       code: ';Sample Test\nloop:\n ld A,R\n and 31\n or #40\n ld BC, #7f10\n out (c),c\n out (c),a\n jr loop\n',
-      buildOptions: { buildmode: 'sna' }
+      buildOptions: { buildmode: 'sna_cpc6128' }
     };
   }
 
   return res;
 });
 
+
+
+function getEmuFile() {
+  let cid = Session.get('curBuildSession');
+  let url = Session.get('fileServerURL');
+  let bset = Session.get('buildSettings');
+  let res;
+
+  let sb = SourceBuilds.findOne({
+    buildId: cid
+  });
+
+  if (cid) {
+    if (sb) {
+      res = url+'/'+sb.output;
+//      res = path.join(url,sb.output);
+    }
+    else // pas de session de build associée
+      return undefined;
+  } else {
+
+    // On utilise le source pour retrouver la session de build
+    // Ce qui n'est pas ideal
+
+    if (FlowRouter.getParam('sourceId')) {
+      //if (Session.equals('displayPrebuilt', true))
+      {
+        const src = SourceAsm.findOne(FlowRouter.getParam('sourceId'));
+        if (src) {
+          const sb = SourceBuilds.findOne({
+            src: src.name + '.asm'
+          }, {
+            sort: {
+              date: -1
+            }
+          });
+          if (sb) {
+      res = url+'/'+sb.output;
+//            res = url + '/' + sb.output;
+          }
+        }
+      }
+    }
+  }
+
+  // Ajout de l'éventuelle commande (DSK)
+  let cmd = res;
+  if (bset)
+    if (bset.command)
+      cmd += '&input=' + bset.command + '%0A'; // use uriencode
+
+  return ({ file: res, cmd: cmd });
+}
 
 Template.ClearSource.onRendered(function () {
   FlowRouter.go('/edit');
@@ -43,10 +97,10 @@ Template.SourceEdit.onRendered(function () {
   this.autorun(() => {
 
     let sid = FlowRouter.getParam('sourceId');
-    let cnt=0;
+    let cnt = 0;
     let handle = Meteor.setInterval(() => {
-      cnt+=1;
-      if (setHeight() || cnt==10) {
+      cnt += 1;
+      if (setHeight() || cnt == 10) {
         Meteor.clearTimeout(handle);
       }
     }, 500);
@@ -94,16 +148,16 @@ Template.SourceEdit.onCreated(function () {
         }
       });
     }
-/*    else {
-      // if there is a slug name, try to find corresponding source
-      const slugname = FlowRouter.getQueryParam('name');
-      if (slugname) {
-        Meteor.call('getSourceIdFromSlugName', slugname, (err,res)=> {
-          if (res) 
-            FlowRouter.go('/edit/'+res);
-        });
-      }
-    }*/
+    /*    else {
+          // if there is a slug name, try to find corresponding source
+          const slugname = FlowRouter.getQueryParam('name');
+          if (slugname) {
+            Meteor.call('getSourceIdFromSlugName', slugname, (err,res)=> {
+              if (res) 
+                FlowRouter.go('/edit/'+res);
+            });
+          }
+        }*/
   });
 
   // debounce?
@@ -172,8 +226,8 @@ Template.SourceEdit.helpers({
   turl() {
     try {
       const bset = Session.get('buildSettings') || {};
-      const zxarch=['sna_zx48', 'sna_zx128', 'tap'];
-      if (zxarch.indexOf(bset.buildmode)>=0) {
+      const zxarch = ['sna_zx48', 'sna_zx128', 'tap'];
+      if (zxarch.indexOf(bset.buildmode) >= 0) {
         return Session.get('tinyZXURL');
       }
       else {
@@ -188,10 +242,10 @@ Template.SourceEdit.helpers({
   },
   emuoptions() {
     let bset = Session.get('buildSettings');
-    switch(bset) {
+    switch (bset) {
       case 'sna_zx48':
       case 'tap':
-          return "joystick=kempston&type=zx48k";
+        return "joystick=kempston&type=zx48k";
       case 'sna_zx128':
         return "joystick=kempston&type=zx128k";
       default:
@@ -200,55 +254,7 @@ Template.SourceEdit.helpers({
 
   },
   // Get File URL
-  emufile() {
-    let cid = Session.get('curBuildSession');
-    let url = Session.get('fileServerURL');
-    let bset = Session.get('buildSettings');
-    let res;
-
-    let sb = SourceBuilds.findOne({
-      buildId: cid
-    });
-
-    if (cid) {
-      if (sb) {
-        res = url + '/' + sb.output;
-      }
-      else // pas de session de build associée
-        return undefined; 
-    } else {
-
-      // On utilise le source pour retrouver la session de build
-      // Ce qui n'est pas bien
-
-      if (FlowRouter.getParam('sourceId')) {
-        //if (Session.equals('displayPrebuilt', true))
-        {
-          const src = SourceAsm.findOne(FlowRouter.getParam('sourceId'));
-          if (src) {
-            const sb = SourceBuilds.findOne({
-              src: src.name + '.asm'
-            }, {
-              sort: {
-                date: -1
-              }
-            });
-            if (sb) {
-              res = url + '/' + sb.output;
-            }
-          }
-        }
-      }
-    }
-
-    // Ajout de l'éventuelle commande (DSK)
-    let cmd = res;
-    if (bset)
-      if (bset.command)
-        cmd += '&input=' + bset.command + '%0A'; // use uriencode
-
-    return ({ file: res, cmd: cmd });
-  },
+  emufile: getEmuFile,
 
   // Get Build Result
   buildResult() {
@@ -344,6 +350,23 @@ function assemble(sourceId) {
 
       Session.set('curBuildSession', data);
       Session.set('displayEmu', true);
+
+      const c = document.querySelector('.container');
+
+      //Load a Amstrad CPC game and warp 20 seconds
+      let url = getEmuFile();
+      console.info('url=', url, 'c =',c );
+//      if (url) {
+
+        rvmPlayer_cpc6128(c, {
+          disk: {
+            type: 'dsk',
+            url: url?.file,
+          },
+          command: url?.cmd, //'run"disc\n',
+          warpFrames: 20 * 50
+        });
+      //}
     });
   } catch (e) {
     Log.error(e.stack);
@@ -367,7 +390,7 @@ function updateSource(srcId) {
 }
 
 Template.SourceEdit.events({
-  "mouseenter #emulator": function(event) {
+  "mouseenter #emulator": function (event) {
     let el = document.getElementById("emuembed");
     //console.info('Set focus to ',el);
     if (el)
@@ -528,3 +551,6 @@ Template.SourceEdit.events({
     }
   }
 });
+
+
+

@@ -31,8 +31,8 @@ Schemas.BuildSettings = new SimpleSchema({
     type: String,
     label: 'Target',
     optional: false,
-    defaultValue: 'sna',
-    allowedValues: ["sna", "dsk", "sna_zx48", "sna_zx128", 'tap'] //,'lib'],
+    defaultValue: 'sna_cpc6128',
+    allowedValues: ['sna', 'sna_cpc6128', 'sna_cpc464', "dsk", "sna_zx48", "sna_zx128", 'tap'] //,'lib'],
   },
   assembler: {
     type: String,
