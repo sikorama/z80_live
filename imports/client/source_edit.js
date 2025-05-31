@@ -83,7 +83,8 @@ function getEmuFile() {
   let cmd = res;
   if (bset)
     if (bset.command)
-      cmd += '&input=' + bset.command + '%0A'; // use uriencode
+      cmd += '&input=' + encodeURIComponent(bset.command) + '%0A'; 
+
 
   return ({ file: res, cmd: cmd });
 }
@@ -339,12 +340,6 @@ function assemble(sourceId) {
     Session.set('displayEmu', false);
     Session.set('curBuildSession', false);
 
-    // Assemblage distant (serveur meteor=>serveur de compilation)
-    // OPTIM:
-    // Voir si il ne faut pas passer par une db pour stocker le source plutot que le passer en parametre
-    // => La c'est le client qui envoit au serveur qui envoit au compilateur...
-    // Marcherait pour le code deja en base, mais pas en cours d'edition
-
     Meteor.call('assemble', code, settings, function (err, data) {
       if (err) Log.error('Assemble error: ', err);
 
@@ -353,12 +348,12 @@ function assemble(sourceId) {
 
       const c = document.querySelector('.container');
 
-      //Load a Amstrad CPC game and warp 20 seconds
       let url = getEmuFile();
-      console.info('url=', url, 'c =',c );
-//      if (url) {
+      Log.info('emu file url=', url, 'c =',c );
 
-        rvmPlayer_cpc6128(c, {
+      //      if (url) {
+
+/*        rvmPlayer_cpc6128(c, {
           disk: {
             type: 'dsk',
             url: url?.file,
@@ -366,6 +361,7 @@ function assemble(sourceId) {
           command: url?.cmd, //'run"disc\n',
           warpFrames: 20 * 50
         });
+        */
       //}
     });
   } catch (e) {
